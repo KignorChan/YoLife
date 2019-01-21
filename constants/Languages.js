@@ -1,0 +1,8 @@
+const LANGUAGES = {
+    CHINESE:{
+
+    },
+    ENGLISH:{
+        
+    }
+}

@@ -8,6 +8,8 @@ import DeviceSetting from './utils/DeviceSetting';
 import Home from './screens/Home';
 import OrderHistory from './screens/OrderHistory';
 import MyCenter from './screens/MyCenter';
+import Setting from './screens/Setting';
+import LanguagesSetting from './screens/LanguagesSetting';
 
 export default class Root extends React.Component {
 
@@ -43,6 +45,21 @@ export default class Root extends React.Component {
             size={26}
             hideNavBar/>
         </Tabs>
+
+      
+          <Scene 
+            key="setting"
+            component={Setting}
+            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.setting}
+            hideNavBar={false}/>
+            
+          <Scene 
+            key="languagessetting"
+            component={LanguagesSetting}
+            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.language}
+            hideNavBar={false}/> 
+        
+
       
       </Scene>
     );

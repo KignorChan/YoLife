@@ -10,6 +10,9 @@ export const LANGUAGES = {
         contactUs:'联系我们',
         setting:'设置',
         logout:'登出',
+        language:'语言',
+        simplifiedChinese:'简体中文',
+        english:'英语',
     },
     ENGLISH:{
         home:'Home',
@@ -22,5 +25,8 @@ export const LANGUAGES = {
         contactUs:'Contact us',
         setting:'Setting',
         logout:'Logout',
+        language:'Language',
+        simplifiedChinese:'Simplified Chinese',
+        english:'English',
     }
 }

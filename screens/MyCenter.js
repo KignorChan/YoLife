@@ -42,6 +42,7 @@ class MyCenter extends React.Component {
                     <Image source={require('../assets/images/qq.jpg')} style={avatar}/>
                     <Text style={headerUsername}>UserName</Text>
                 </View>
+                
                 <ScrollView style={buttonSection}>
 
                     <TouchableOpacity style={styles.buttonContainer}>
@@ -94,6 +95,7 @@ class MyCenter extends React.Component {
                         />
                 
                     </TouchableOpacity>
+
                     <TouchableOpacity style={styles.buttonContainer}>
                         <Icon 
                             name={'ios-add-circle-outline'}
@@ -128,7 +130,7 @@ class MyCenter extends React.Component {
                 
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.buttonContainer} onPress={()=>{Actions.push('setting')}}>
                         <Icon 
                             name={'ios-construct'}
                             size={25}

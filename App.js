@@ -3,6 +3,8 @@ import { View, ActivityIndicator } from 'react-native';
 import Root from './Root';
 import DeviceSetting from './utils/DeviceSetting';
 
+import Setting from './screens/Setting';
+
 export default class App extends React.Component {
 
   constructor(props){

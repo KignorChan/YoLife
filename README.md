@@ -4,7 +4,7 @@
 
 Go to the root of the project, run command in terminal:
 ```
-yarn  OR  npm install
+yarn  
 expo start  OR  npm start
 ```
 

@@ -63,7 +63,7 @@ class MyCenter extends React.Component {
 
                     <TouchableOpacity style={styles.buttonContainer}>
                         <Icon 
-                            name={'ios-briefcase'}
+                            name={'ios-star'}
                             size={25}
                             color='#000'
                             style={styles.buttonIcon}
@@ -80,7 +80,7 @@ class MyCenter extends React.Component {
 
                     <TouchableOpacity style={styles.buttonContainer}>
                         <Icon 
-                            name={'ios-briefcase'}
+                            name={'ios-create'}
                             size={25}
                             color='#000'
                             style={styles.buttonIcon}
@@ -96,7 +96,7 @@ class MyCenter extends React.Component {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.buttonContainer}>
                         <Icon 
-                            name={'ios-briefcase'}
+                            name={'ios-add-circle-outline'}
                             size={25}
                             color='#000'
                             style={styles.buttonIcon}
@@ -113,7 +113,7 @@ class MyCenter extends React.Component {
 
                     <TouchableOpacity style={styles.buttonContainer}>
                         <Icon 
-                            name={'ios-briefcase'}
+                            name={'ios-call'}
                             size={25}
                             color='#000'
                             style={styles.buttonIcon}
@@ -130,7 +130,7 @@ class MyCenter extends React.Component {
 
                     <TouchableOpacity style={styles.buttonContainer}>
                         <Icon 
-                            name={'ios-briefcase'}
+                            name={'ios-construct'}
                             size={25}
                             color='#000'
                             style={styles.buttonIcon}
@@ -147,7 +147,7 @@ class MyCenter extends React.Component {
 
                     <TouchableOpacity style={styles.buttonContainer}>
                         <Icon 
-                            name={'ios-briefcase'}
+                            name={'ios-log-out'}
                             size={25}
                             color='#000'
                             style={styles.buttonIcon}

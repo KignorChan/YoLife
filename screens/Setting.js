@@ -50,7 +50,6 @@ const styles = {
     container:{
         flex:1,
         backgroundColor:'#eee',
-        paddingTop: Platform.OS==='android'?StatusBar.currentHeight:0,
         
 
     },
@@ -71,7 +70,8 @@ const styles = {
         marginLeft: 20,
     },
     buttonSection:{
-        backgroundColor:'#eee'
+        backgroundColor:'#eee',
+        paddingTop:0
     },
     buttonContainer:{
         backgroundColor:'#fff',
@@ -82,7 +82,6 @@ const styles = {
         paddingRight: 20,
         paddingTop: 20,
         paddingBottom: 20,
-        
     },
     buttonIcon:{
     },

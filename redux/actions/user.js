@@ -1,7 +1,6 @@
 'use strict';
 
 import { AlertIOS } from 'react-native';
-
 import * as TYPES from './types';
 
 // fake user data

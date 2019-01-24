@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import { Header, Body } from 'native-base';
+
 
 var {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -14,7 +16,7 @@ class Home extends React.Component {
     render(){
         return(
             <View style={{flex:1, backgroundColor:'#ddd'}}>
-
+                
             </View>
         )
     }

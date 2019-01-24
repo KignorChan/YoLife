@@ -9,8 +9,6 @@ import {
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
-
-
 class Classify extends Component{
     render(){
         return(
@@ -20,7 +18,7 @@ class Classify extends Component{
                 }}>
                     <View style={styles.icon}>
                         <Image 
-                            source={require('../images/icons/homeTypeIcon/food.png')}
+                            source={require('../../assets/images/icons/homeTypeIcon/food.png')}
                             style={{
                                 height:width*0.085,
                                 width:width*0.085,
@@ -36,7 +34,7 @@ class Classify extends Component{
                 }}>
                     <View style={styles.icon}>
                         <Image 
-                            source={require('../images/icons/homeTypeIcon/delivary.png')}
+                            source={require('../../assets/images/icons/homeTypeIcon/delivary.png')}
                             style={{
                                 height:width*0.085,
                                 width:width*0.085,
@@ -52,7 +50,7 @@ class Classify extends Component{
                 }}>
                     <View style={styles.icon}>
                         <Image 
-                            source={require('../images/icons/homeTypeIcon/drink.png')}
+                            source={require('../../assets/images/icons/homeTypeIcon/drink.png')}
                             style={{
                                 height:width*0.085,
                                 width:width*0.085,
@@ -68,7 +66,7 @@ class Classify extends Component{
                 }}>
                     <View style={styles.icon}>
                         <Image 
-                            source={require('../images/icons/homeTypeIcon/milk.png')}
+                            source={require('../../assets/images/icons/homeTypeIcon/milk.png')}
                             style={{
                                 height:width*0.085,
                                 width:width*0.085,
@@ -96,8 +94,9 @@ const styles = StyleSheet.create({
         paddingTop:6,
         justifyContent:'space-around',
         backgroundColor:'#FFFFFE',
-        height:120
-
+        height:120,
+        borderTopColor:'#eee', 
+        borderTopWidth:2
     },
     iconitem:{
         width:'20%',

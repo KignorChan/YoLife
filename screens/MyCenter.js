@@ -5,6 +5,7 @@ import {View,
     StyleSheet,
     Dimensions,
     Image,
+    Button,
     AsyncStorage,
     DeviceEventEmitter,
     TouchableOpacity,
@@ -15,8 +16,9 @@ import {View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Actions } from 'react-native-router-flux';
-
+import { connect } from 'react-redux';
 import DeviceSetting from '../utils/DeviceSetting';
+import { logOut } from '../redux/actions/user';
 
 const { width, height } = Dimensions.get('window');
 const HEADER_HEIGHT = height*0.18;
@@ -25,6 +27,10 @@ const AVATAR_SIZE = HEADER_HEIGHT*0.5;
 class MyCenter extends React.Component {
 
     componentDidMount(){
+    }
+
+    _goLoginPage(){
+        Actions.push('login');
     }
     
     render(){
@@ -39,8 +45,10 @@ class MyCenter extends React.Component {
         return(
             <SafeAreaView style={container}>
                 <View style={header}>
-                    <Image source={require('../assets/images/qq.jpg')} style={avatar}/>
-                    <Text style={headerUsername}>UserName</Text>
+                    <TouchableOpacity onPress={()=>this._goLoginPage()} style={styles.left}>
+                        <Image source={require('../assets/images/qq.jpg')} style={avatar}/>
+                        <Text style={headerUsername}>{this.props.isLoggedIn ? this.props.user.email :  DeviceSetting.setting.APP_LANGUAGE_PACKAGE.loginText}</Text>
+                    </TouchableOpacity> 
                 </View>
                 
                 <ScrollView style={buttonSection}>
@@ -147,7 +155,7 @@ class MyCenter extends React.Component {
                 
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buttonContainer}>
+                    <TouchableOpacity onPress={() => this.props.gotoLogout()} style={styles.buttonContainer}>
                         <Icon 
                             name={'ios-log-out'}
                             size={25}
@@ -182,7 +190,7 @@ const styles = {
         height:HEADER_HEIGHT,
         alignItems: 'center',
         flexDirection: 'row',
-        paddingLeft: width*0.1,
+        paddingLeft: 10,
         backgroundColor:'#fff',
     },
     avatar:{
@@ -191,8 +199,8 @@ const styles = {
         borderRadius: AVATAR_SIZE/2,
     },
     headerUsername:{
-        fontSize: 24,
-        marginLeft: 20,
+        fontSize: 20,
+        marginLeft: 15,
     },
     buttonSection:{
         backgroundColor:'#eee'
@@ -218,8 +226,33 @@ const styles = {
     buttonArrowIcon:{
         justifyContent:'flex-end',
         color:'rgba(0,0,0,0.3)',
-    }
+    },
+    left:{
+        width:'70%',
+        height:width/3/2,
+        marginLeft: 10,
+        flexDirection:'row',
+        alignItems:'center',
+    },
 
 }
 
-export default MyCenter;
+
+function mapState2Props(store){
+    return {
+        isLoggedIn: store.userStore.isLoggedIn,
+        user: store.userStore.user,
+        status: store.userStore.status,
+    }
+}
+
+function mapDispatch2Props(dispatch){
+    return {
+        gotoLogout(){
+            dispatch(logOut());
+        }
+    }
+}
+
+
+export default connect(mapState2Props,mapDispatch2Props)(MyCenter);

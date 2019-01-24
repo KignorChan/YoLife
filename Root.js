@@ -9,6 +9,8 @@ import Home from './screens/Home';
 import OrderHistory from './screens/OrderHistory';
 import MyCenter from './screens/MyCenter';
 import Setting from './screens/Setting';
+import Login from './screens/login/login'
+import Register from './screens/login/regis';
 import LanguagesSetting from './screens/LanguagesSetting';
 
 export default class Root extends React.Component {
@@ -47,18 +49,29 @@ export default class Root extends React.Component {
         </Tabs>
 
       
-          <Scene 
-            key="setting"
-            component={Setting}
-            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.setting}
-            hideNavBar={false}/>
-            
-          <Scene 
-            key="languagessetting"
-            component={LanguagesSetting}
-            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.language}
-            hideNavBar={false}/> 
+        <Scene 
+          key="setting"
+          component={Setting}
+          title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.setting}
+          hideNavBar={false}/>
+          
+        <Scene 
+          key="languagessetting"
+          component={LanguagesSetting}
+          title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.language}
+          hideNavBar={false}/> 
         
+        <Scene 
+            key="login"
+            component={Login}
+            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.login}
+            hideNavBar={false}/>
+        
+        <Scene 
+            key="register"
+            component={Register}
+            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.register}
+            hideNavBar={false}/>
 
       
       </Scene>

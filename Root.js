@@ -2,6 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View, Platform } from 'react-native';
 import { Router, Scene, Actions, Tabs, Stack, Drawer } from 'react-native-router-flux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import DeviceSetting from './utils/DeviceSetting';
 
@@ -11,7 +13,16 @@ import MyCenter from './screens/MyCenter';
 import Setting from './screens/Setting';
 import LanguagesSetting from './screens/LanguagesSetting';
 
+
+
 export default class Root extends React.Component {
+
+  icon = (result)=>{
+    console.log(JSON.stringify(result));
+    return (
+      <Ionicons name='ios-home'/>
+    )
+  }
 
   _renderScenes(){
     return (
@@ -22,27 +33,39 @@ export default class Root extends React.Component {
             initial 
             component={Home} 
             title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.home}
-            icon={Ionicons} 
-            name="ios-home" 
-            size={26}
+            icon={({focused})=>{
+              if(focused){
+                return(<MaterialCommunityIcons name='home' size={30} />)
+              }else{
+                return (<MaterialCommunityIcons name='home-outline' size={30} />)
+              }
+            }} 
             hideNavBar/>
       
           <Scene 
             key="orderHistory" 
             component={OrderHistory} 
             title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.myOrder}
-            icon={Ionicons} 
-            name="ios-list-box" 
-            size={26}
+            icon={({focused})=>{
+              if(focused){
+                return(<Ionicons name='ios-list-box' size={30} />)
+              }else{
+                return (<Ionicons name='ios-list' size={30} />)
+              }
+            }} 
             hideNavBar/>
       
           <Scene 
             key="myCenter" 
             component={MyCenter} 
             title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.me}
-            icon={Ionicons} 
-            name="md-person" 
-            size={26}
+            icon={({focused})=>{
+              if(focused){
+                return(<MaterialIcons name='person' size={30} />)
+              }else{
+                return (<MaterialIcons name='person-outline' size={30} />)
+              }
+            }} 
             hideNavBar/>
         </Tabs>
 

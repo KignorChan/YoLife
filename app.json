@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "yolife",
+    "description":"A software that provides takeaway delivery services",
     "slug": "yolife",
     "privacy": "public",
     "sdkVersion": "32.0.0",
@@ -10,7 +11,7 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -23,7 +24,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.laplace.yolife"
+    },
+    "android": {
+      "package": "com.laplace.yolife"
     }
   }
 }

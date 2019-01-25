@@ -24,7 +24,10 @@ export const LANGUAGES = {
         profile:'个人资料',
         firstName:'名字',
         lastName:'姓氏',
-        
+        homeAddress:'家庭地址',
+        workAddress:'工作地址',
+        previousAddress:'曾用地址',
+        locationSetting:'设置地址',
     },
     ENGLISH:{
         home:'Home',
@@ -50,6 +53,11 @@ export const LANGUAGES = {
         payment:'Payment',
         profile:'Profile',
         firstName:'First name',
-        lastName:'Last name'
+        lastName:'Last name',
+        homeAddress:'Home address',
+        workAddress:'Work address',
+        previousAddress:'Previous addresses',
+        locationSetting:'Location Setting'
+
     }
 }

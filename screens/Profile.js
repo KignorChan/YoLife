@@ -59,42 +59,45 @@ const DEFAULT_IMAGE_SOURCE = 'https://firebasestorage.googleapis.com/v0/b/pickup
                 justifyContent:'space-between', 
                 backgroundColor:'#fff',
                 paddingLeft:20,
-                paddingTop:20,
+                paddingTop:10,
                 paddingBottom:10,
-                marginTop:2
+                marginTop:2,
             }}>
                 <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.firstName+': '}</Text>
                 <TextInput style={{fontSize:20}}>{this.state.firstName}</TextInput>
             </View>
             <View style={{
-                flexDirection:'row', 
                 justifyContent:'space-between', 
                 backgroundColor:'#fff',
-                padding:20,
-                marginTop:2
+                paddingLeft:20,
+                paddingTop:10,
+                paddingBottom:10,
+                marginTop:2,
             }}>
-                <Text>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.lastName+': '}</Text>
-                <TextInput>{this.state.lastName}</TextInput>
+                <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.lastName+': '}</Text>
+                <TextInput style={{fontSize:20}}>{this.state.lastName}</TextInput>
             </View>
             <View style={{
-                flexDirection:'row', 
                 justifyContent:'space-between', 
                 backgroundColor:'#fff',
-                padding:20,
-                marginTop:2
+                paddingLeft:20,
+                paddingTop:10,
+                paddingBottom:10,
+                marginTop:2,
             }}>
-                <Text>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.telephoneNumber+': '}</Text>
-                <TextInput>{this.state.phoneNumber}</TextInput>
+                <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.telephoneNumber+': '}</Text>
+                <TextInput style={{fontSize:20}}>{this.state.phoneNumber}</TextInput>
             </View>
             <View style={{
-                flexDirection:'row', 
                 justifyContent:'space-between', 
                 backgroundColor:'#fff',
-                padding:20,
-                marginTop:2
+                paddingLeft:20,
+                paddingTop:10,
+                paddingBottom:10,
+                marginTop:2,
             }}>
-                <Text>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.email+': '}</Text>
-                <TextInput>{this.state.email}</TextInput>
+                <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.email+': '}</Text>
+                <TextInput style={{fontSize:20}}>{this.state.email}</TextInput>
             </View>
 
             <TouchableOpacity style={{
@@ -104,7 +107,7 @@ const DEFAULT_IMAGE_SOURCE = 'https://firebasestorage.googleapis.com/v0/b/pickup
                 padding:20,
                 marginTop:20
             }}>
-                <TextInput>Change password</TextInput>
+                <Text style={{fontSize:18}}>Change password</Text>
             </TouchableOpacity>
         </ScrollView>
       </SafeAreaView>

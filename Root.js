@@ -16,6 +16,7 @@ import Register from './screens/login/regis';
 import LanguagesSetting from './screens/LanguagesSetting';
 import ContactUs from './screens/ContactUs';
 import Profile from './screens/Profile';
+import LocationSetting from './screens/LocationSetting';
 
 const { width, height } = Dimensions.get('window');
 
@@ -111,6 +112,12 @@ export default class Root extends React.Component {
             component={Profile}
             title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.profile}
             hideNavBar={true}/>
+
+        <Scene 
+            key="locationsetting"
+            component={LocationSetting}
+            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.locationSetting}
+            hideNavBar={false}/>
 
       
       </Scene>

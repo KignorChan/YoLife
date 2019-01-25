@@ -41,7 +41,7 @@ class Setting extends React.Component{
                             style={styles.buttonArrowIcon}
                         />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonContainer} onPress={()=>{Actions.push('languagessetting')}}>
+                    <TouchableOpacity style={styles.buttonContainer} onPress={()=>{Actions.push('locationsetting')}}>
                         <EntypoIcon 
                             name={'location'}
                             size={25}
@@ -55,7 +55,7 @@ class Setting extends React.Component{
                             style={styles.buttonArrowIcon}
                         />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonContainer} onPress={()=>{Actions.push('languagessetting')}}>
+                    <TouchableOpacity style={styles.buttonContainer} onPress={()=>{}}>
                         <EntypoIcon 
                             name={'credit-card'}
                             size={25}

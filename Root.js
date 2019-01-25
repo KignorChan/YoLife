@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Platform } from 'react-native';
+import { StyleSheet, Text, View, Platform, Dimensions } from 'react-native';
 import { Router, Scene, Actions, Tabs, Stack, Drawer } from 'react-native-router-flux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,8 +14,11 @@ import Setting from './screens/Setting';
 import Login from './screens/login/login'
 import Register from './screens/login/regis';
 import LanguagesSetting from './screens/LanguagesSetting';
+import ContactUs from './screens/ContactUs';
 
+const { width, height } = Dimensions.get('window');
 
+const TABBAR_HEIGHT = height*0.08;
 
 export default class Root extends React.Component {
 
@@ -29,7 +32,7 @@ export default class Root extends React.Component {
   _renderScenes(){
     return (
       <Scene key="root" hideNavBar>
-        <Tabs>
+        <Tabs tabBarStyle={{height:TABBAR_HEIGHT}}>
           <Scene 
             key="home" 
             initial 
@@ -76,12 +79,18 @@ export default class Root extends React.Component {
           key="setting"
           component={Setting}
           title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.setting}
-          hideNavBar={false}/>
+          hideNavBar={true}/>
           
         <Scene 
           key="languagessetting"
           component={LanguagesSetting}
           title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.language}
+          hideNavBar={false}/> 
+
+        <Scene 
+          key="contactus"
+          component={ContactUs}
+          title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.contactUs}
           hideNavBar={false}/> 
         
         <Scene 

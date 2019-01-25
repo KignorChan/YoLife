@@ -15,6 +15,7 @@ import {View,
     Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import DeviceSetting from '../utils/DeviceSetting';
@@ -53,9 +54,9 @@ class MyCenter extends React.Component {
                 
                 <ScrollView style={buttonSection}>
 
-                    <TouchableOpacity style={styles.buttonContainer}>
-                        <Icon 
-                            name={'ios-briefcase'}
+                    {/*<TouchableOpacity style={styles.buttonContainer}>
+                        <SimpleLineIcons 
+                            name={'paper-clip'}
                             size={25}
                             color='#000'
                             style={styles.buttonIcon}
@@ -68,11 +69,11 @@ class MyCenter extends React.Component {
                             style={styles.buttonArrowIcon}
                         />
                   
-                    </TouchableOpacity>
+        </TouchableOpacity>*/}
 
                     <TouchableOpacity style={styles.buttonContainer}>
-                        <Icon 
-                            name={'ios-star'}
+                        <SimpleLineIcons 
+                            name={'star'}
                             size={25}
                             color='#000'
                             style={styles.buttonIcon}
@@ -88,8 +89,8 @@ class MyCenter extends React.Component {
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.buttonContainer}>
-                        <Icon 
-                            name={'ios-create'}
+                        <SimpleLineIcons 
+                            name={'organization'}
                             size={25}
                             color='#000'
                             style={styles.buttonIcon}
@@ -105,8 +106,8 @@ class MyCenter extends React.Component {
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.buttonContainer}>
-                        <Icon 
-                            name={'ios-add-circle-outline'}
+                        <SimpleLineIcons 
+                            name={'plus'}
                             size={25}
                             color='#000'
                             style={styles.buttonIcon}
@@ -121,9 +122,9 @@ class MyCenter extends React.Component {
                 
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buttonContainer}>
-                        <Icon 
-                            name={'ios-call'}
+                    <TouchableOpacity style={styles.buttonContainer} onPress={()=>{Actions.push('contactus')}}>
+                        <SimpleLineIcons 
+                            name={'phone'}
                             size={25}
                             color='#000'
                             style={styles.buttonIcon}
@@ -139,8 +140,8 @@ class MyCenter extends React.Component {
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.buttonContainer} onPress={()=>{Actions.push('setting')}}>
-                        <Icon 
-                            name={'ios-construct'}
+                        <SimpleLineIcons 
+                            name={'settings'}
                             size={25}
                             color='#000'
                             style={styles.buttonIcon}
@@ -155,9 +156,9 @@ class MyCenter extends React.Component {
                 
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => this.props.gotoLogout()} style={styles.buttonContainer}>
-                        <Icon 
-                            name={'ios-log-out'}
+                    {/*<TouchableOpacity onPress={() => this.props.gotoLogout()} style={styles.buttonContainer}>
+                        <SimpleLineIcons 
+                            name={'logout'}
                             size={25}
                             color='#000'
                             style={styles.buttonIcon}
@@ -170,7 +171,7 @@ class MyCenter extends React.Component {
                             style={styles.buttonArrowIcon}
                         />
                 
-                    </TouchableOpacity>
+                        </TouchableOpacity>*/}
 
                 </ScrollView>
             </SafeAreaView>

@@ -8,6 +8,7 @@ import {
   ImageBackground,
   Image,
   AlertIOS,
+  TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux';
 import ModalBox from 'react-native-modalbox';
@@ -36,9 +37,6 @@ class LoginPage extends Component{
     handleLogin(){
         const { username, password } = this.state;
         if (!username || !password) {
-            AlertIOS.alert(
-                 'username, password?'
-            );
             return;
         }
         let opt = {
@@ -117,12 +115,12 @@ class LoginPage extends Component{
                                 </View>
                             </View>
                             <View style={loginStyle.btn}>
-                                <View style={loginStyle.btnWrap}>
-                                    <Text style={loginStyle.loginBtn1} onPress={this.handleLogin}>Log in</Text>
-                                </View>
-                                <View style={loginStyle.btnWrap}>
-                                    <Text style={loginStyle.loginBtn2} onPress={this.handleRegister}>Register</Text>
-                                </View>
+                                <TouchableOpacity style={loginStyle.btnWrap} onPress={this.handleLogin}>
+                                    <Text style={loginStyle.loginBtn1} >Log in</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={loginStyle.btnWrap} onPress={this.handleRegister}>
+                                    <Text style={loginStyle.loginBtn2}>Register</Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
                         

@@ -105,7 +105,7 @@ class MyCenter extends React.Component {
                 
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.buttonContainer} onPress={()=>{Actions.push('addbusinesses')}}>
                         <SimpleLineIcons 
                             name={'plus'}
                             size={25}

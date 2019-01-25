@@ -17,6 +17,7 @@ import LanguagesSetting from './screens/LanguagesSetting';
 import ContactUs from './screens/ContactUs';
 import Profile from './screens/Profile';
 import LocationSetting from './screens/LocationSetting';
+import AddBusinesses from './screens/AddBusinesses';
 
 const { width, height } = Dimensions.get('window');
 
@@ -117,6 +118,12 @@ export default class Root extends React.Component {
             key="locationsetting"
             component={LocationSetting}
             title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.locationSetting}
+            hideNavBar={false}/>
+
+        <Scene 
+            key="addbusinesses"
+            component={AddBusinesses}
+            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.newBusiness}
             hideNavBar={false}/>
 
       

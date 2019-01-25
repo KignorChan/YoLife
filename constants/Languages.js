@@ -28,6 +28,11 @@ export const LANGUAGES = {
         workAddress:'工作地址',
         previousAddress:'曾用地址',
         locationSetting:'设置地址',
+        addBusiness:'添加商店',
+        newBusiness:'新商店',
+        information:'基本信息',
+        items:'商品条目',
+        contact:'联系信息',
     },
     ENGLISH:{
         home:'Home',
@@ -57,7 +62,11 @@ export const LANGUAGES = {
         homeAddress:'Home address',
         workAddress:'Work address',
         previousAddress:'Previous addresses',
-        locationSetting:'Location Setting'
-
+        locationSetting:'Location Setting',
+        addBusiness:'Add Businesses',
+        newBusiness:'New Business',
+        information:'Information',
+        items:'Items',
+        contact:'Contact',
     }
 }

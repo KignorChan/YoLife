@@ -28,7 +28,7 @@ export default SettingHeader = () => {
                 marginBottom:10
             }}/>
             <Text style={{fontSize:25, fontWeight:'bold'}}>User Name</Text>
-            <TouchableOpacity style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
+            <TouchableOpacity style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}} onPress={()=>{Actions.push('profile')}}>
                 <Text style={{fontSize:18, color:'#4286f4'}}>Edit</Text>
                 <EntypoIcon name='new-message' size={18} style={{marginLeft:5, color:'#4286f4'}}/>
             </TouchableOpacity>

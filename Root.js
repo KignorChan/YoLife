@@ -15,6 +15,7 @@ import Login from './screens/login/login'
 import Register from './screens/login/regis';
 import LanguagesSetting from './screens/LanguagesSetting';
 import ContactUs from './screens/ContactUs';
+import Profile from './screens/Profile';
 
 const { width, height } = Dimensions.get('window');
 
@@ -32,7 +33,7 @@ export default class Root extends React.Component {
   _renderScenes(){
     return (
       <Scene key="root" hideNavBar>
-        <Tabs tabBarStyle={{height:TABBAR_HEIGHT}}>
+        <Tabs tabBarStyle={{height:TABBAR_HEIGHT}} swipeEnabled={true} >
           <Scene 
             key="home" 
             initial 
@@ -104,6 +105,12 @@ export default class Root extends React.Component {
             component={Register}
             title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.register}
             hideNavBar={false}/>
+
+        <Scene 
+            key="profile"
+            component={Profile}
+            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.profile}
+            hideNavBar={true}/>
 
       
       </Scene>

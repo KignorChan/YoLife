@@ -21,6 +21,10 @@ export const LANGUAGES = {
         wechat:'微信',
         location:'位置',
         payment:'支付',
+        profile:'个人资料',
+        firstName:'名字',
+        lastName:'姓氏',
+        
     },
     ENGLISH:{
         home:'Home',
@@ -44,5 +48,8 @@ export const LANGUAGES = {
         wechat:'Wechat',
         location:'Location',
         payment:'Payment',
+        profile:'Profile',
+        firstName:'First name',
+        lastName:'Last name'
     }
 }

@@ -12,12 +12,12 @@ import {
     SafeAreaView, 
     KeyboardAvoidingView, 
     Keyboard, 
-    Animated,
-    Modal 
+    Animated, 
 } from 'react-native';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import Carousel from 'react-native-looped-carousel';
+import Modal from "react-native-modal";
 
 import DeviceSetting from '../utils/DeviceSetting';
 
@@ -66,6 +66,7 @@ class AddBusinesses extends Component{
 
     _toggleModal(){
         this.setState({showAddCategoryModal:!this.state.showAddCategoryModal, category:''})
+        //alert(this.state.showAddCategoryModal)
     }
 
     _renderInformationSection(){
@@ -152,42 +153,12 @@ class AddBusinesses extends Component{
 
         return(
             <ScrollView style={{flex:1}}>
-                <TouchableOpacity style={buttonStyle} onPress={()=>{this._toggleModal}}>
-                    <Text style={buttonTextStyle}>Add Category</Text>
+            <View style={{flex:1, alignItems:'center'}}>
+                <TouchableOpacity style={buttonStyle} onPress={()=>{this._toggleModal()}}>
+                    <Text style={buttonTextStyle}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.addCategory}</Text>
                 </TouchableOpacity>
+            </View>
 
-                {/*<Modal isVisible={this.state.showAddCategoryModal}>
-                    <View style={modalContent}>
-                    <TextInput
-                    style={{
-                        height: 40,
-                        width: '100%',
-                        borderColor: 'gray',
-                        borderBottomWidth: 1,
-                    }}
-                    onChangeText={text => this.setState({ category: text })}
-                    value={this.state.category}
-                    />
-                    <View
-                    style={{
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexDirection: 'row',
-                        margin: 10,
-                    }}
-                    >
-                    <TouchableOpacity style={buttonStyle} onPress={this.addCategory}>
-                        <Text style={buttonTextStyle}>Confirm</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={submitButtonStyle}
-                        onPress={this._toggleModal}
-                    >
-                        <Text style={submitButtonTextStyle}>Cancel</Text>
-                    </TouchableOpacity>
-                    </View>
-                </View>
-                </Modal>*/}
             </ScrollView>
         )
     }
@@ -252,8 +223,14 @@ class AddBusinesses extends Component{
         const {
             container,
             scrollableView,
-            body
+            body,
+            modalContent,
+            buttonStyle,
+            buttonTextStyle,
+            submitButtonStyle,
+            submitButtonTextStyle
         } = styles;
+
 
         return(
             <KeyboardAvoidingView style={container} enabled behavior='padding' keyboardVerticalOffset={Platform.OS==='android'?100:0}>
@@ -268,6 +245,40 @@ class AddBusinesses extends Component{
                         {this._renderContactSection()}
                     </View>
                 </ScrollableTabView>
+
+                <Modal style={{flex:1}} isVisible={this.state.showAddCategoryModal} onBackdropPress={this._toggleModal}>
+                    <View style={modalContent}>
+                        <TextInput
+                        style={{
+                            height: 40,
+                            width: '100%',
+                            borderColor: 'gray',
+                            borderBottomWidth: 1,
+                        }}
+                        onChangeText={text => this.setState({ category: text })}
+                        value={this.state.category}
+                        />
+                        <View
+                        style={{
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexDirection: 'row',
+                            margin: 10,
+                        }}
+                        >
+                        <TouchableOpacity style={buttonStyle} onPress={()=>{this.addCategory}}>
+                            <Text style={buttonTextStyle}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.confirm}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={submitButtonStyle}
+                            onPress={()=>{this._toggleModal()}}
+                        >
+                            <Text style={submitButtonTextStyle}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.cancel}</Text>
+                        </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+                
             </KeyboardAvoidingView>
         )
     }
@@ -304,6 +315,8 @@ const styles = {
         marginTop: 10,
         marginLeft: 5,
         marginRight: 5,
+        justifyContent:'center',
+        alignItems: 'center',
     },
     buttonTextStyle: {
         color: '#000',
@@ -318,6 +331,8 @@ const styles = {
         marginTop: 10,
         marginLeft: 5,
         marginRight: 5,
+        justifyContent:'center',
+        alignItems: 'center',
     },
     submitButtonTextStyle: {
         color: '#fff',

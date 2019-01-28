@@ -38,7 +38,10 @@ export const LANGUAGES = {
         ownerName:'所有者名称',
         tags:'标签',
         website:'网站',
-        address:'地址'
+        address:'地址',
+        addCategory:'添加类别',
+        confirm:'确认',
+        cancel:'取消'
     },
     ENGLISH:{
         home:'Home',
@@ -79,6 +82,9 @@ export const LANGUAGES = {
         ownerName:'Owner name',
         tags:'Tags',
         website:'Website',
-        address:'Address'
+        address:'Address',
+        addCategory:'Add category',
+        confirm:'Confirm',
+        cancel:'Cancel'
     }
 }

@@ -11,7 +11,7 @@ import Home from './screens/Home';
 import OrderHistory from './screens/OrderHistory';
 import MyCenter from './screens/MyCenter';
 import Setting from './screens/Setting';
-import Login from './screens/login/login'
+import Login from './screens/Login'
 import Register from './screens/login/regis';
 import LanguagesSetting from './screens/LanguagesSetting';
 import ContactUs from './screens/ContactUs';
@@ -100,7 +100,7 @@ export default class Root extends React.Component {
             key="login"
             component={Login}
             title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.login}
-            hideNavBar={false}/>
+            hideNavBar={true}/>
         
         <Scene 
             key="register"

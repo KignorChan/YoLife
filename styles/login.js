@@ -20,7 +20,12 @@ var styles = StyleSheet.create({
     },
 
     loginMain: {
-      flex:1,
+      justifyContent:'center',
+      alignItems: 'center',
+      backgroundColor:'#00000044',
+      borderRadius:10,
+      flex:1
+
     },
 
     loginMainCon: {
@@ -87,7 +92,6 @@ var styles = StyleSheet.create({
     },
 
     btnWrap:{
-      marginTop: 150,
       borderRadius: 5,
       height: 50,
     },

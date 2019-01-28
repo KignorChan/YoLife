@@ -33,6 +33,12 @@ export const LANGUAGES = {
         information:'基本信息',
         items:'商品条目',
         contact:'联系信息',
+        businessName:'商店名称',
+        description:'简介',
+        ownerName:'所有者名称',
+        tags:'标签',
+        website:'网站',
+        address:'地址'
     },
     ENGLISH:{
         home:'Home',
@@ -68,5 +74,11 @@ export const LANGUAGES = {
         information:'Information',
         items:'Items',
         contact:'Contact',
+        businessName:'Business name',
+        description:'Description',
+        ownerName:'Owner name',
+        tags:'Tags',
+        website:'Website',
+        address:'Address'
     }
 }

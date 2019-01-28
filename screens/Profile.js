@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, Dimensions, TouchableOpacity, Image, ScrollView, Platform, StatusBar, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, Dimensions, TouchableOpacity, Image, ScrollView, Platform, StatusBar, SafeAreaView, Animated, Keyboard, KeyboardAvoidingView } from 'react-native';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import { Actions } from 'react-native-router-flux';
@@ -27,92 +27,116 @@ const DEFAULT_IMAGE_SOURCE = 'https://firebasestorage.googleapis.com/v0/b/pickup
             email:'pickupper.work@gmail.com',
             avatarUrl:'',
         }
-    }
-  render() {
-    return (
-      <SafeAreaView style={{
-          flex:1,
-          paddingTop: Platform.OS==='android'?StatusBar.currentHeight:0,
-        }}>
-        <View style={{
-            backgroundColor:'#fff', 
-            height:HEADER_HEIGHT, 
-            justifyContent:'center', 
-            alignItems:'center',
-        }}>
-            <Image source={{uri:DEFAULT_IMAGE_SOURCE}} style={{
-                height:AVATAR_SIZE, 
-                width:AVATAR_SIZE, 
-                borderRadius: AVATAR_SIZE/2,
-                marginBottom:10
-            }}/>
-            <TouchableOpacity style={{
-                position:'absolute',
-                top:20,
-                left:20
-            }} onPress={()=>{Actions.pop()}}>
-                <FeatherIcon name='arrow-left' size={28} />
-            </TouchableOpacity>
-        </View>
-        <ScrollView>
-            <View style={{
-                justifyContent:'space-between', 
-                backgroundColor:'#fff',
-                paddingLeft:20,
-                paddingTop:10,
-                paddingBottom:10,
-                marginTop:2,
-            }}>
-                <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.firstName+': '}</Text>
-                <TextInput style={{fontSize:20}}>{this.state.firstName}</TextInput>
-            </View>
-            <View style={{
-                justifyContent:'space-between', 
-                backgroundColor:'#fff',
-                paddingLeft:20,
-                paddingTop:10,
-                paddingBottom:10,
-                marginTop:2,
-            }}>
-                <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.lastName+': '}</Text>
-                <TextInput style={{fontSize:20}}>{this.state.lastName}</TextInput>
-            </View>
-            <View style={{
-                justifyContent:'space-between', 
-                backgroundColor:'#fff',
-                paddingLeft:20,
-                paddingTop:10,
-                paddingBottom:10,
-                marginTop:2,
-            }}>
-                <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.telephoneNumber+': '}</Text>
-                <TextInput style={{fontSize:20}}>{this.state.phoneNumber}</TextInput>
-            </View>
-            <View style={{
-                justifyContent:'space-between', 
-                backgroundColor:'#fff',
-                paddingLeft:20,
-                paddingTop:10,
-                paddingBottom:10,
-                marginTop:2,
-            }}>
-                <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.email+': '}</Text>
-                <TextInput style={{fontSize:20}}>{this.state.email}</TextInput>
-            </View>
+        this.keyboardMove = new Animated.ValueXY();
 
-            <TouchableOpacity style={{
-                flexDirection:'row', 
-                justifyContent:'center', 
-                backgroundColor:'#fff',
-                padding:20,
-                marginTop:20
+    }
+
+    componentDidMount(){
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
+    }
+
+    _keyboardDidShow(e){
+        Animated.timing(this.keyboardMove,{
+            toValue: {x:0, y:-e.endCoordinates.height},
+            duration:250
+        }).start();
+    }
+
+    _keyboardDidHide(e){
+        Animated.timing(this.keyboardMove,{
+            toValue: {x:0, y:0},
+            duration:250
+        }).start();
+    }
+
+    render() {
+        return (
+        <SafeAreaView style={{
+            flex:1,
+            paddingTop: Platform.OS==='android'?StatusBar.currentHeight:0,
             }}>
-                <Text style={{fontSize:18}}>Change password</Text>
-            </TouchableOpacity>
-        </ScrollView>
-      </SafeAreaView>
-    )
-  }
+            <KeyboardAvoidingView style={{flex:1}} enabled behavior='padding'>
+            <View style={{
+                backgroundColor:'#fff', 
+                height:HEADER_HEIGHT, 
+                justifyContent:'center', 
+                alignItems:'center',
+            }}>
+                <Image source={{uri:DEFAULT_IMAGE_SOURCE}} style={{
+                    height:AVATAR_SIZE, 
+                    width:AVATAR_SIZE, 
+                    borderRadius: AVATAR_SIZE/2,
+                    marginBottom:10
+                }}/>
+                <TouchableOpacity style={{
+                    position:'absolute',
+                    top:20,
+                    left:20
+                }} onPress={()=>{Actions.pop()}}>
+                    <FeatherIcon name='arrow-left' size={28} />
+                </TouchableOpacity>
+            </View>
+            <ScrollView>
+                <View style={{
+                    justifyContent:'space-between', 
+                    backgroundColor:'#fff',
+                    paddingLeft:20,
+                    paddingTop:10,
+                    paddingBottom:10,
+                    marginTop:2,
+                }}>
+                    <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.firstName+': '}</Text>
+                    <TextInput style={{fontSize:20}}>{this.state.firstName}</TextInput>
+                </View>
+                <View style={{
+                    justifyContent:'space-between', 
+                    backgroundColor:'#fff',
+                    paddingLeft:20,
+                    paddingTop:10,
+                    paddingBottom:10,
+                    marginTop:2,
+                }}>
+                    <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.lastName+': '}</Text>
+                    <TextInput style={{fontSize:20}}>{this.state.lastName}</TextInput>
+                </View>
+                <View style={{
+                    justifyContent:'space-between', 
+                    backgroundColor:'#fff',
+                    paddingLeft:20,
+                    paddingTop:10,
+                    paddingBottom:10,
+                    marginTop:2,
+                }}>
+                    <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.telephoneNumber+': '}</Text>
+                    <TextInput style={{fontSize:20}}>{this.state.phoneNumber}</TextInput>
+                </View>
+                <View style={{
+                    justifyContent:'space-between', 
+                    backgroundColor:'#fff',
+                    paddingLeft:20,
+                    paddingTop:10,
+                    paddingBottom:10,
+                    marginTop:2,
+                }}>
+                    <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.email+': '}</Text>
+                    <TextInput style={{fontSize:20}}>{this.state.email}</TextInput>
+                </View>
+
+                <TouchableOpacity style={{
+                    flexDirection:'row', 
+                    justifyContent:'center', 
+                    backgroundColor:'#fff',
+                    padding:20,
+                    marginTop:20
+                }}>
+                    <Text style={{fontSize:18}}>Change password</Text>
+                </TouchableOpacity>
+            </ScrollView>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
+        )
+    }
 }
 
 export default Profile;

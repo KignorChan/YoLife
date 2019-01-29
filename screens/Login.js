@@ -45,7 +45,7 @@ class LoginPage extends Component{
     async componentWillMount() {
         try{
           await Font.loadAsync({
-            Arial: require("native-base/Fonts/Arial.ttf"),
+            Arial: require("../assets/fontFamily/Arial.ttf"),
             Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
             Roboto: require("native-base/Fonts/Roboto.ttf"),
           });

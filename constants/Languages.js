@@ -45,7 +45,9 @@ export const LANGUAGES = {
         username:'用户名',
         password:'密码',
         forgetPassword:'忘记密码',
-        welcome:'欢迎'
+        welcome:'欢迎',
+        confirmPassword:'确认密码',
+        phoneNumber:'电话号码'
     },
     ENGLISH:{
         home:'Home',
@@ -93,6 +95,8 @@ export const LANGUAGES = {
         username:'Username',
         password:'Password',
         forgetPassword:'Forget password',
-        welcome:'Welcome'
+        welcome:'Welcome',
+        confirmPassword:'Confirm password',
+        phoneNumber:'Phone number'
     }
 }

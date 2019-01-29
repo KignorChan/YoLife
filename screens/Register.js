@@ -27,14 +27,16 @@ import {
   Icon,
 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
+import DeviceSetting from '../utils/DeviceSetting';
 import DataUtil from  '../utils/DataUtil';
 import {Toast} from 'teaset';
+import { parsePhoneNumberFromString } from 'libphonenumber-js/max'
 
 export default class RegisterView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
+      email: '',
       password: '',
       passwordConfirm: '',
       message: '',
@@ -49,7 +51,7 @@ export default class RegisterView extends React.Component {
   async componentWillMount() {
     try{
       await Font.loadAsync({
-        Arial: require("native-base/Fonts/Arial.ttf"),
+        Arial: require("../assets/fontFamily/Arial.ttf"),
         Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
         Roboto: require("native-base/Fonts/Roboto.ttf"),
       });
@@ -61,17 +63,27 @@ export default class RegisterView extends React.Component {
   }
 
   register = () => {
-    if(!DataUtil.check_email_format(this.state.username)){
-      Toast.sad("the email format is not right!");
+    if(this.state.email===''){
+        Toast.sad("Please enter your email!");
+        return;
+    }
+
+    if(this.state.password===''){
+        Toast.sad("Please enter your password!");
+        return;
+    }
+
+    if(!DataUtil.check_email_format(this.state.email)){
+      Toast.sad("The email format is not right!");
       return;
     }
     if(!DataUtil.check_phone_format(this.state.mobile)){
-      Toast.sad("the mobile format is not right!");
+      Toast.sad("The mobile format is not right!");
       return;
     }
     if (this.state.password != '' && this.state.password != null){
         if(this.state.password.length<6 || this.state.password.length > 14 ){
-            Toast.sad("the password length is between 6 and 14!");
+            Toast.sad("The password length is between 6 and 14!");
             //this.setState({ message: 'the password length is between 6 and 14!', confirmed: false });
             return;
         }
@@ -82,39 +94,51 @@ export default class RegisterView extends React.Component {
       return ;
     } else {
       this.setState({ message: 'Loading...', loading: true, confirmed: true });
-      FireBase.signup(this.state.username, this.state.password)
-        .then(result => {
-          FireBase.updateUserType(result.uid, this.state.dropdownText);
-          //if(result.emailVerified){
-            FireBase.login(false, {
-              email: this.state.username,
-              password: this.state.password,
-            })
-              .then(r1 => {
-                FireBase.getDatabase().ref('users/'+result.uid).on('value',snapshot=>{
-                  var user = snapshot.val();
-                  Authentication.saveItem('userId', result.uid);
-                  Authentication.saveItem('userEmail', this.state.username);
-                  FireBase.currentUser.userType = user.userType;
-                });
+
+      const phoneNumber = parsePhoneNumberFromString(this.state.mobile, 'CA');
+
+      if(phoneNumber){
+          if(!phoneNumber.isValid()){
+              Toast.sad("The phone number is not valid!");
+              return;
+          }
+      }
+
+
+      
+    //   FireBase.signup(this.state.username, this.state.password)
+    //     .then(result => {
+    //       FireBase.updateUserType(result.uid, this.state.dropdownText);
+    //       //if(result.emailVerified){
+    //         FireBase.login(false, {
+    //           email: this.state.username,
+    //           password: this.state.password,
+    //         })
+    //           .then(r1 => {
+    //             FireBase.getDatabase().ref('users/'+result.uid).on('value',snapshot=>{
+    //               var user = snapshot.val();
+    //               Authentication.saveItem('userId', result.uid);
+    //               Authentication.saveItem('userEmail', this.state.username);
+    //               FireBase.currentUser.userType = user.userType;
+    //             });
   
-                Actions.push('mainPage');
-              })
-              .catch(e => {
-                console.log(e.message);
-                this.setState({ message: e.message, loading: false });
-              });
-          // }else{
-          //   Actions.push('emailVerification',{from:'registerView'})
-          // }
+    //             Actions.push('mainPage');
+    //           })
+    //           .catch(e => {
+    //             console.log(e.message);
+    //             this.setState({ message: e.message, loading: false });
+    //           });
+    //       // }else{
+    //       //   Actions.push('emailVerification',{from:'registerView'})
+    //       // }
           
-        })
-        .catch(error => {
-          // Handle Errors here.
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          this.setState({ message: error.message, loading: false });
-        });
+    //     })
+    //     .catch(error => {
+    //       // Handle Errors here.
+    //       const errorCode = error.code;
+    //       const errorMessage = error.message;
+    //       this.setState({ message: error.message, loading: false });
+    //     });
     }
   };
 
@@ -155,7 +179,9 @@ export default class RegisterView extends React.Component {
   render() {
     if(this.state.loading){
       return (
-        <ActivityIndicator size="large" color="#0000ff" />
+          <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
       )
     }
     return (
@@ -163,18 +189,18 @@ export default class RegisterView extends React.Component {
         <Content style={{ backgroundColor: 'white' }}>
           <View style={{ marginLeft: 20, marginRight: 20, marginTop: 30 }}>
             <Fumi
-              label="Email"
+              label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.email}
               iconClass={FontAwesomeIcon}
               iconName={'envelope'}
               iconColor={'#f95a25'}
               iconSize={20}
               onChangeText={value =>
-                this.debouncedSetState({ username: value })
+                this.debouncedSetState({ email: value })
               }
               
             />
             <Fumi
-              label="Password"
+              label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.password}
               iconClass={FontAwesomeIcon}
               iconName={'key'}
               iconColor={'#f95a25'}
@@ -186,7 +212,7 @@ export default class RegisterView extends React.Component {
               
             />
             <Fumi
-              label="Password Confirm"
+              label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.confirmPassword}
               iconClass={FontAwesomeIcon}
               iconName={'key'}
               iconColor={'#f95a25'}
@@ -203,7 +229,7 @@ export default class RegisterView extends React.Component {
                 iconName={'phone'}
                 iconColor={'#f95a25'}
                 iconSize={20}
-                label="Mobile"
+                label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.phoneNumber}
                 onChangeText={value =>
                   this.debouncedSetState({ mobile: value })
                 }

@@ -22,9 +22,13 @@ var styles = StyleSheet.create({
     loginMain: {
       justifyContent:'center',
       alignItems: 'center',
-      backgroundColor:'#00000044',
+      backgroundColor:'#00000077',
       borderRadius:10,
-      flex:1
+      paddingTop:60,
+      paddingBottom: 60,
+      paddingLeft:30,
+      paddingRight: 30,
+
 
     },
 

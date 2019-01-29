@@ -9,32 +9,52 @@ import {
   Image,
   AlertIOS,
   TouchableOpacity,
-  SafeAreaView
+  SafeAreaView,
+  ActivityIndicator
 } from 'react-native';
 import { connect } from 'react-redux';
 import ModalBox from 'react-native-modalbox';
 import Spinner from 'react-native-spinkit';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import { Font, AppLoading } from "expo";
 import { logIn, skipLogin } from '../redux/actions/user';
 import commonStyle from '../styles/common';
 import loginStyle from '../styles/login';
 import { Actions } from 'react-native-router-flux';
+
+import DeviceSetting from '../utils/DeviceSetting';
+
 
 
 class LoginPage extends Component{
     constructor(props){
         super(props);
         this.state = {
-            username: 'username',
+            username: '',
             password: '',
             btnFlag: true,
             modalVisible: false,
+            loading: true,
         };
         this.onChangeName = this.onChangeName.bind(this);
         this.onChangePswd = this.onChangePswd.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
         this.handleRegister = this.handleRegister.bind(this);
     }
+
+    async componentWillMount() {
+        try{
+          await Font.loadAsync({
+            Arial: require("native-base/Fonts/Arial.ttf"),
+            Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+            Roboto: require("native-base/Fonts/Roboto.ttf"),
+          });
+          this.setState({ loading: false });
+        }catch(e){
+          console.log('Fail to load fonts!')
+        }
+    
+      }
 
     handleLogin(){
         const { username, password } = this.state;
@@ -69,13 +89,21 @@ class LoginPage extends Component{
 
     render(){
         const { username, password, modalVisible } = this.state;
+
+        if(this.state.loading){
+            return (
+                <ActivityIndicator size="large" color="#0000ff" />
+            )
+        }
+
         return (
             <View style={[commonStyle.wrapper, loginStyle.loginWrap]}>
                 <ImageBackground
                     source={require('../assets/images/foodPic.jpg')}
-                    style={{ resizeMode: 'stretch', flex: 1 }}
+                    style={{ resizeMode: 'stretch', flex: 1, justifyContent:'center', alignItems:'center' }}
                 >
                 <View style={loginStyle.loginMain}>
+                    <Text style={{fontSize:28, fontFamily:'Arial', color:'#ffffff'}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.welcome+'!'}</Text>
                     <View style={loginStyle.formStyle}>
                         <View style={[loginStyle.formInput,loginStyle.formInputSplit]}>
                             <Image
@@ -84,7 +112,7 @@ class LoginPage extends Component{
                             />
                             <TextInput 
                                 ref="login_name" 
-                                placeholder='username' 
+                                placeholder={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.username}
                                 style={loginStyle.loginInput} 
                                 onChangeText={this.onChangeName}
                                 value={username}
@@ -96,7 +124,7 @@ class LoginPage extends Component{
                                 ref="login_psw"  
                                 style={loginStyle.loginInput} 
                                 secureTextEntry={true}
-                                placeholder='password' 
+                                placeholder={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.password}
                                 value={password}
                                 onChangeText={this.onChangePswd} />
                         </View>
@@ -104,16 +132,16 @@ class LoginPage extends Component{
                     </View>
                     <View style={{alignItems:'center'}}>
                         <TouchableOpacity onPress={()=>{alert('sfjas')}} style={[loginStyle.forget,{flexDirection:'row'}]}>
-                            <Image source={require('../imgs/icons/prompt.png')} style={{width:15,height:15,resizeMode: 'contain',marginRight:10}}/>
-                            <Text style={{color:'#62a2e0'}}>forget password?</Text>
+                            <FeatherIcon name='alert-circle' size={16} style={{color:'#fff', marginRight:5}}/>
+                            <Text style={{color:'#fff'}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.forgetPassword+'?'}</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={loginStyle.btn}>
                         <TouchableOpacity style={loginStyle.btnWrap} onPress={this.handleLogin}>
-                            <Text style={loginStyle.loginBtn1} >Log in</Text>
+                            <Text style={loginStyle.loginBtn1} >{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.login}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={loginStyle.btnWrap} onPress={this.handleRegister}>
-                            <Text style={loginStyle.loginBtn2}>Register</Text>
+                            <Text style={loginStyle.loginBtn2}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.register}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

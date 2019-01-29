@@ -39,7 +39,8 @@ class AddBusinesses extends Component{
 
         this.state = {
             showAddCategoryModal:false,
-            category:''
+            category:'',
+            items:[],
         }
 
         this.keyboardMove = new Animated.ValueXY();

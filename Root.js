@@ -12,7 +12,7 @@ import OrderHistory from './screens/OrderHistory';
 import MyCenter from './screens/MyCenter';
 import Setting from './screens/Setting';
 import Login from './screens/Login'
-import Register from './screens/login/regis';
+import Register from './screens/Register';
 import LanguagesSetting from './screens/LanguagesSetting';
 import ContactUs from './screens/ContactUs';
 import Profile from './screens/Profile';

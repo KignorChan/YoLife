@@ -27,7 +27,7 @@ import {
   Icon,
 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-import DataUtil from  '../../utils/DataUtil';
+import DataUtil from  '../utils/DataUtil';
 import {Toast} from 'teaset';
 
 export default class RegisterView extends React.Component {

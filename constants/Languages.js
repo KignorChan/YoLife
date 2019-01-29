@@ -41,7 +41,11 @@ export const LANGUAGES = {
         address:'地址',
         addCategory:'添加类别',
         confirm:'确认',
-        cancel:'取消'
+        cancel:'取消',
+        username:'用户名',
+        password:'密码',
+        forgetPassword:'忘记密码',
+        welcome:'欢迎'
     },
     ENGLISH:{
         home:'Home',
@@ -85,6 +89,10 @@ export const LANGUAGES = {
         address:'Address',
         addCategory:'Add category',
         confirm:'Confirm',
-        cancel:'Cancel'
+        cancel:'Cancel',
+        username:'Username',
+        password:'Password',
+        forgetPassword:'Forget password',
+        welcome:'Welcome'
     }
 }

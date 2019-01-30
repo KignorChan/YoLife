@@ -105,6 +105,8 @@ export default class RegisterView extends React.Component {
       }
 
 
+
+
       
     //   FireBase.signup(this.state.username, this.state.password)
     //     .then(result => {
@@ -197,7 +199,7 @@ export default class RegisterView extends React.Component {
               onChangeText={value =>
                 this.debouncedSetState({ email: value })
               }
-              
+              keyboardType='email-address'
             />
             <Fumi
               label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.password}
@@ -233,6 +235,7 @@ export default class RegisterView extends React.Component {
                 onChangeText={value =>
                   this.debouncedSetState({ mobile: value })
                 }
+                keyboardType='numeric'
             />
 
               {/* <TouchableOpacity onPress={this.renderUserTypeSelection.bind(this)}>

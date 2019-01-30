@@ -47,7 +47,11 @@ export const LANGUAGES = {
         forgetPassword:'忘记密码',
         welcome:'欢迎',
         confirmPassword:'确认密码',
-        phoneNumber:'电话号码'
+        phoneNumber:'电话号码',
+        aboutUs:'关于我们',
+        feedback:'反馈',
+        feedbackMessage:'在此处提供反馈......',
+        sendFeedback:'发送反馈'
     },
     ENGLISH:{
         home:'Home',
@@ -97,6 +101,10 @@ export const LANGUAGES = {
         forgetPassword:'Forget password',
         welcome:'Welcome',
         confirmPassword:'Confirm password',
-        phoneNumber:'Phone number'
+        phoneNumber:'Phone number',
+        aboutUs:'About us',
+        feedback:'Feedback',
+        feedbackMessage:'Place your feedback here...',
+        sendFeedback:'Send feedback'
     }
 }

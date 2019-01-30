@@ -18,6 +18,7 @@ import ContactUs from './screens/ContactUs';
 import Profile from './screens/Profile';
 import LocationSetting from './screens/LocationSetting';
 import AddBusinesses from './screens/AddBusinesses';
+import Feedback from './screens/Feedback';
 
 const { width, height } = Dimensions.get('window');
 
@@ -124,6 +125,12 @@ export default class Root extends React.Component {
             key="addbusinesses"
             component={AddBusinesses}
             title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.newBusiness}
+            hideNavBar={false}/>
+
+        <Scene 
+            key="feedback"
+            component={Feedback}
+            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.feedback}
             hideNavBar={false}/>
 
       

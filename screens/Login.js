@@ -10,11 +10,13 @@ import {
   AlertIOS,
   TouchableOpacity,
   SafeAreaView,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import { connect } from 'react-redux';
 import ModalBox from 'react-native-modalbox';
 import Spinner from 'react-native-spinkit';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import { Makiko } from 'react-native-textinput-effects';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import { Font, AppLoading } from "expo";
 import { logIn, skipLogin } from '../redux/actions/user';
@@ -116,6 +118,7 @@ class LoginPage extends Component{
                                 style={loginStyle.loginInput} 
                                 onChangeText={this.onChangeName}
                                 value={username}
+                                keyboardType='email-address'
                             />
                         </View>
                         <View style={loginStyle.formInput}>

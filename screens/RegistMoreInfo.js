@@ -9,12 +9,14 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
+  Platform
 } from 'react-native';
 import { Font, AppLoading } from "expo";
 import * as _ from 'lodash';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import { Isao,Fumi } from 'react-native-textinput-effects';
+import { Isao,Fumi, Hoshi } from 'react-native-textinput-effects';
+import { Constants, ImagePicker, Permissions } from 'expo';
 import {
   Button,
   Text,
@@ -31,25 +33,45 @@ import * as firebase from 'firebase';
 import DeviceSetting from '../utils/DeviceSetting';
 import DataUtil from  '../utils/DataUtil';
 import {Toast} from 'teaset';
-import { parsePhoneNumberFromString } from 'libphonenumber-js/max'
+import { parsePhoneNumberFromString } from 'libphonenumber-js/max';
+import Modal from "react-native-modal";
+import { resolve } from 'uri-js';
+import { reject } from 'rsvp';
 
-export default class RegisterView extends React.Component {
+
+//import { Platform } from 'expo-core';
+
+var {width, height} = Dimensions.get('window');
+const ASPECT_RATIO = width / height;
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
+const HEADER_HEIGHT = height*0.25;
+const AVATAR_SIZE = HEADER_HEIGHT*0.5;
+const DEFAULT_IMAGE_SOURCE = 'https://firebasestorage.googleapis.com/v0/b/pickupper-47f2b.appspot.com/o/images%2FMcDonald%2F1547679255517%2F1548365479365.jpg?alt=media&token=053e4a9a-7cd4-48ba-808f-8cf5be91787a';
+
+
+export default class RegistMoreInfo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
-      passwordConfirm: '',
+      firstName: '',
+      lastName: '',
       message: '',
       confirmed: true,
       loading: true,
-      userType:'',
+      userType:['customer'],
       dropdownText: 'customer',
       mobile:'',
+      photoURL:'',
+      image: null,
+      uploading: false,
     };
   }
 
   async componentWillMount() {
+    console.log(JSON.stringify(this.props.account.user.uid));
+
     try{
       await Font.loadAsync({
         Arial: require("../assets/fontFamily/Arial.ttf"),
@@ -60,7 +82,11 @@ export default class RegisterView extends React.Component {
     }catch(e){
       console.log('Fail to load fonts!')
     }
+  }
 
+  async componentDidMount(){
+    await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    await Permissions.askAsync(Permissions.CAMERA);
   }
 
   register = () => {
@@ -105,14 +131,8 @@ export default class RegisterView extends React.Component {
           }
       }
 
-      firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(account=>{
-        //console.log(JSON.stringify(user));
-        Actions.push('registmoreinfo', {account});
-        this.setState({loading:false});
-      }).catch(e=>{
-        console.log(JSON.stringify(e))
-        alert('Something error!')
-        this.setState({loading:false});
+      firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(user=>{
+        console.log(JSON.stringify(user));
       })
 
 
@@ -189,6 +209,60 @@ export default class RegisterView extends React.Component {
     // );
   }
 
+  async _renderImagePicker(){
+    if(Platform.OS==='ios'){
+    await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    }
+
+    ImagePicker.launchImageLibraryAsync({
+        mediaTypes:'Images'
+    }).then(image=>{
+        console.log('IMAGE: '+JSON.stringify(image));
+        if (!image.cancelled) {
+            let photoURL = this.uploadPhoto(image.uri, this.props.account.user.uid)
+            this.setState({ image: image.uri, photoURL: photoURL });
+        }else{
+            console.log('CANCEL!');
+        }
+    }).catch(e=>{
+        console.log('Image picker error: '+ JSON.stringify(e));
+    })
+  }
+
+  async _renderCamera(){
+    await Permissions.askAsync(Permissions.CAMERA);
+    await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+    
+    ImagePicker.launchCameraAsync({
+        allowsEditing:true
+    }).then(image=>{
+        console.log('IMAGE: '+JSON.stringify(image));
+        if (!image.cancelled) {
+            this.setState({ image: image.uri });
+        }else{
+            console.log('CANCEL!');
+        }
+    }).catch(e=>{
+        console.log('Image picker error: '+ JSON.stringify(e));
+    })
+  }
+
+  uploadImage(){
+      return new Promise((resolve, reject)=>{
+
+      })
+  }
+
+    async uploadPhoto(uri, uid){
+        alert(uid)
+        const response = await fetch(uri);
+        const blob = await response.blob();
+        firebase.storage().ref().child('/images/avatar/'+uid).put(blob, {contentType: 'image/jpg'});
+        // console.log(JSON.stringify(snapshot))
+        // return snapshot.downloadURL;
+    };
+
   render() {
     if(this.state.loading){
       return (
@@ -201,43 +275,76 @@ export default class RegisterView extends React.Component {
       <Container>
         <Content style={{ backgroundColor: 'white' }}>
           <View style={{ marginLeft: 20, marginRight: 20, marginTop: 30 }}>
-            <Fumi
-              label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.email}
+            <View style={{
+                backgroundColor:'#fff', 
+                height:HEADER_HEIGHT, 
+                justifyContent:'center', 
+                alignItems:'center',
+            }}>
+                <TouchableOpacity onPress={()=>{this._renderImagePicker()}}>
+                {this.state.photoURL?
+                <Image source={{uri:this.state.photoURL}} style={{
+                    height:AVATAR_SIZE, 
+                    width:AVATAR_SIZE, 
+                    borderRadius: AVATAR_SIZE/2,
+                    marginBottom:10
+                }}/>
+                :<Image source={{uri:DEFAULT_IMAGE_SOURCE}} style={{
+                    height:AVATAR_SIZE, 
+                    width:AVATAR_SIZE, 
+                    borderRadius: AVATAR_SIZE/2,
+                    marginBottom:10
+                }}/>
+                }
+
+                </TouchableOpacity>
+            </View>
+            <Hoshi
+            label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.firstName}
+            borderColor={'#b76c94'}
+            onChangeText={value =>
+                this.debouncedSetState({ firstName: value })
+        ``  }
+            />
+            <Hoshi
+            label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.lastName}
+            borderColor={'#b76c94'}
+            onChangeText={value =>
+                this.debouncedSetState({ lastName: value })
+            }
+            />
+            <Hoshi
+            label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.phoneNumber}
+            borderColor={'#b76c94'}
+            onChangeText={value =>
+                this.debouncedSetState({ mobile: value })
+            }
+            keyboardType='numeric'
+            />
+            {/*<Fumi
+              label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.firstName}
               iconClass={FontAwesomeIcon}
-              iconName={'envelope'}
+              iconName={'user'}
               iconColor={'#f95a25'}
               iconSize={20}
               onChangeText={value =>
-                this.debouncedSetState({ email: value })
+                this.debouncedSetState({ firstName: value })
               }
               keyboardType='email-address'
             />
             <Fumi
-              label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.password}
+              label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.lastName}
               iconClass={FontAwesomeIcon}
-              iconName={'key'}
+              iconName={'user'}
               iconColor={'#f95a25'}
               iconSize={20}
-              secureTextEntry
               onChangeText={value =>
-                this.debouncedSetState({ password: value })
+                this.debouncedSetState({ lastName: value })
               }
               
             />
-            <Fumi
-              label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.confirmPassword}
-              iconClass={FontAwesomeIcon}
-              iconName={'key'}
-              iconColor={'#f95a25'}
-              iconSize={20}
-              secureTextEntry
-              onChangeText={value =>
-                this.debouncedSetState({ passwordConfirm: value })
-              }
-             
-            />
 
-            {/*<Fumi
+            <Fumi
                 iconClass={FontAwesomeIcon}
                 iconName={'phone'}
                 iconColor={'#f95a25'}
@@ -247,7 +354,7 @@ export default class RegisterView extends React.Component {
                   this.debouncedSetState({ mobile: value })
                 }
                 keyboardType='numeric'
-              />*/}
+            />*/}
 
               {/* <TouchableOpacity onPress={this.renderUserTypeSelection.bind(this)}>
               <View style={{flex: 1, paddingTop:20, flexDirection:'row'}}>
@@ -259,15 +366,17 @@ export default class RegisterView extends React.Component {
               </TouchableOpacity> */}
 
 
-            {/*this.state.message.length > 0 ? (
+            {this.state.message.length > 0 ? (
               <Text>{this.state.message}</Text>
-            ) : null*/}
+            ) : null}
           </View>
           <View
             style={{
               marginTop: 20,
               marginLeft:50,
+              marginRight:50,
               flexDirection: 'row',
+              justifyContent:'space-around'
             }}
           >
             <Button
@@ -275,9 +384,43 @@ export default class RegisterView extends React.Component {
               onPress={() => this.register()}
               disabled={this.state.loading}
             >
-              <Text style={{ color: 'white' }}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.register}</Text>
+              <Text style={{ color: 'white' }}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.skip}</Text>
+            </Button>
+            <Button
+                onPress={() => this.register()}
+                disabled={this.state.loading}
+            >
+                <Text style={{ color: 'white' }}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.next}</Text>
             </Button>
           </View>
+          <Modal isVisible={true} style={{justifyContent:'center', alignItems:'center'}}>
+          <View style={{backgroundColor:'#fff',paddingTop:10, paddingBottom:10, width:width*0.8, borderRadius:10}}>
+            <View style={{padding:10, borderBottomColor:'#ddd', borderBottomWidth:1}}>
+                <View><Text style={{fontSize:23, marginLeft:20}}>{'Choose a photo from:'}</Text></View>
+            </View>
+            <TouchableOpacity style={{
+                justifyContent:'center', 
+                alignItems:'center', 
+                padding:10,
+                borderBottomColor:'#ddd', 
+                borderBottomWidth:1}}
+                onPress={()=>{
+                    this._renderImagePicker()
+                }}>
+                <Text style={{fontSize:18}}>Album</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{
+                justifyContent:'center', 
+                alignItems:'center', 
+                padding:10}}
+                onPress={()=>{
+                    this._renderCamera()
+                }}>
+                <Text style={{fontSize:18}}>Camera</Text>
+            </TouchableOpacity>
+          </View>
+
+          </Modal>
         </Content>
       </Container>
     );

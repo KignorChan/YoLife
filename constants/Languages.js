@@ -51,7 +51,10 @@ export const LANGUAGES = {
         aboutUs:'关于我们',
         feedback:'反馈',
         feedbackMessage:'在此处提供反馈......',
-        sendFeedback:'发送反馈'
+        sendFeedback:'发送反馈',
+        moreInfo:'更多信息',
+        next:'下一步',
+        skip:'跳过'
     },
     ENGLISH:{
         home:'Home',
@@ -105,6 +108,9 @@ export const LANGUAGES = {
         aboutUs:'About us',
         feedback:'Feedback',
         feedbackMessage:'Place your feedback here...',
-        sendFeedback:'Send feedback'
+        sendFeedback:'Send feedback',
+        moreInfo:'More info',
+        next:'Next',
+        skip:'Skip'
     }
 }

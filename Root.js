@@ -19,6 +19,9 @@ import Profile from './screens/Profile';
 import LocationSetting from './screens/LocationSetting';
 import AddBusinesses from './screens/AddBusinesses';
 import Feedback from './screens/Feedback';
+import RegistMoreInfo from './screens/RegistMoreInfo';
+
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -131,6 +134,12 @@ export default class Root extends React.Component {
             key="feedback"
             component={Feedback}
             title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.feedback}
+            hideNavBar={false}/>
+
+        <Scene 
+            key="registmoreinfo"
+            component={RegistMoreInfo}
+            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.moreInfo}
             hideNavBar={false}/>
 
       

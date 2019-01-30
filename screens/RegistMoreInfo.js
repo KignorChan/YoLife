@@ -37,6 +37,8 @@ import { parsePhoneNumberFromString } from 'libphonenumber-js/max';
 import Modal from "react-native-modal";
 import { resolve } from 'uri-js';
 import { reject } from 'rsvp';
+import FileUploader from "react-firebase-file-uploader";
+
 
 
 //import { Platform } from 'expo-core';
@@ -48,7 +50,7 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const HEADER_HEIGHT = height*0.25;
 const AVATAR_SIZE = HEADER_HEIGHT*0.5;
-const DEFAULT_IMAGE_SOURCE = 'https://firebasestorage.googleapis.com/v0/b/pickupper-47f2b.appspot.com/o/images%2FMcDonald%2F1547679255517%2F1548365479365.jpg?alt=media&token=053e4a9a-7cd4-48ba-808f-8cf5be91787a';
+const DEFAULT_IMAGE_SOURCE = 'https://firebasestorage.googleapis.com/v0/b/yolife-541a7.appspot.com/o/images%2Favatar%2FSwhzLFSDZNMFZRZx8L2L6bJvTyx1.jpg?alt=media&token=d10f8821-385a-45ee-b1d6-5cc066c50fc5';
 
 
 export default class RegistMoreInfo extends React.Component {
@@ -66,6 +68,7 @@ export default class RegistMoreInfo extends React.Component {
       photoURL:'',
       image: null,
       uploading: false,
+      showImageGrabModal:false
     };
   }
 
@@ -219,7 +222,7 @@ export default class RegistMoreInfo extends React.Component {
     }).then(image=>{
         console.log('IMAGE: '+JSON.stringify(image));
         if (!image.cancelled) {
-            let photoURL = this.uploadPhoto(image.uri, this.props.account.user.uid)
+            this.uploadPhoto(image.uri, this.props.account.user.uid)
             this.setState({ image: image.uri, photoURL: photoURL });
         }else{
             console.log('CANCEL!');
@@ -237,7 +240,7 @@ export default class RegistMoreInfo extends React.Component {
     ImagePicker.launchCameraAsync({
         allowsEditing:true
     }).then(image=>{
-        console.log('IMAGE: '+JSON.stringify(image));
+        //console.log('IMAGE: '+JSON.stringify(image));
         if (!image.cancelled) {
             this.setState({ image: image.uri });
         }else{
@@ -248,19 +251,18 @@ export default class RegistMoreInfo extends React.Component {
     })
   }
 
-  uploadImage(){
-      return new Promise((resolve, reject)=>{
-
-      })
-  }
-
     async uploadPhoto(uri, uid){
-        alert(uid)
+        //alert(uid);
+        //this.setState({loading:true});
         const response = await fetch(uri);
         const blob = await response.blob();
-        firebase.storage().ref().child('/images/avatar/'+uid).put(blob, {contentType: 'image/jpg'});
-        // console.log(JSON.stringify(snapshot))
-        // return snapshot.downloadURL;
+        var storageRef = firebase.storage().ref().child('/images/avatar/'+uid+'.jpg');
+        storageRef.put(blob, {contentType: 'image/*'}).then(()=>storageRef.getDownloadURL()).then(downloadURI=>{
+            console.log(downloadURI);
+            this.setState({photoURL:downloadURI, showImageGrabModal:false});
+        }).catch(e=>{
+            console.log('ERRRR'+e)
+        })
     };
 
   render() {
@@ -281,8 +283,8 @@ export default class RegistMoreInfo extends React.Component {
                 justifyContent:'center', 
                 alignItems:'center',
             }}>
-                <TouchableOpacity onPress={()=>{this._renderImagePicker()}}>
-                {this.state.photoURL?
+                <TouchableOpacity onPress={()=>{this.setState({showImageGrabModal:true})}}>
+                {this.state.photoURL!==''?
                 <Image source={{uri:this.state.photoURL}} style={{
                     height:AVATAR_SIZE, 
                     width:AVATAR_SIZE, 
@@ -393,7 +395,7 @@ export default class RegistMoreInfo extends React.Component {
                 <Text style={{ color: 'white' }}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.next}</Text>
             </Button>
           </View>
-          <Modal isVisible={true} style={{justifyContent:'center', alignItems:'center'}}>
+          <Modal isVisible={this.state.showImageGrabModal} style={{justifyContent:'center', alignItems:'center'}} onBackdropPress={()=>this.setState({showImageGrabModal:false})}>
           <View style={{backgroundColor:'#fff',paddingTop:10, paddingBottom:10, width:width*0.8, borderRadius:10}}>
             <View style={{padding:10, borderBottomColor:'#ddd', borderBottomWidth:1}}>
                 <View><Text style={{fontSize:23, marginLeft:20}}>{'Choose a photo from:'}</Text></View>

@@ -178,10 +178,6 @@ export default class RegistMoreInfo extends React.Component {
     }
   };
 
-  componentDidMount() {
-    this.debouncedSetState = _.debounce(this.setState, 300);
-  }
-
   renderUserTypeSelection(){
     Alert.alert(
       'Account Type',
@@ -257,7 +253,7 @@ export default class RegistMoreInfo extends React.Component {
         const response = await fetch(uri);
         const blob = await response.blob();
         var storageRef = firebase.storage().ref().child('/images/avatar/'+uid+'.jpg');
-        storageRef.put(blob, {contentType: 'image/*'}).then(()=>storageRef.getDownloadURL()).then(downloadURI=>{
+        storageRef.put(blob, {contentType: 'image/jpg'}).then(()=>storageRef.getDownloadURL()).then(downloadURI=>{
             console.log(downloadURI);
             this.setState({photoURL:downloadURI, showImageGrabModal:false});
         }).catch(e=>{
@@ -304,23 +300,23 @@ export default class RegistMoreInfo extends React.Component {
             <Hoshi
             label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.firstName}
             borderColor={'#b76c94'}
-            onChangeText={value =>
-                this.debouncedSetState({ firstName: value })
-        ``  }
+            onChangeText={(value)=>{
+              this.setState({ firstName: value })
+            }}
             />
             <Hoshi
             label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.lastName}
             borderColor={'#b76c94'}
-            onChangeText={value =>
-                this.debouncedSetState({ lastName: value })
-            }
+            onChangeText={(value)=>{
+              this.setState({ lastName: value })
+            }}
             />
             <Hoshi
             label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.phoneNumber}
             borderColor={'#b76c94'}
-            onChangeText={value =>
-                this.debouncedSetState({ mobile: value })
-            }
+            onChangeText={(value)=>{
+              this.setState({ mobile: value })
+            }}
             keyboardType='numeric'
             />
             {/*<Fumi

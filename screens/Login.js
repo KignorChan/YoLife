@@ -151,8 +151,8 @@ class LoginPage extends Component{
                 </ImageBackground>
                 <TouchableOpacity style={{
                     position:'absolute',
-                    top:60,
-                    left:20
+                    marginTop:40,
+                    marginLeft:20
                 }} onPress={()=>{Actions.pop()}}>
                     <FeatherIcon name='arrow-left' size={30} />
                 </TouchableOpacity>

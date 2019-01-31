@@ -65,3 +65,12 @@ export function logOut(){
 		'type': TYPES.LOGGED_OUT
 	}
 }
+
+
+//SAVE ACCOUNT 
+export function saveAccount(account){
+	return {
+		'type': TYPES.SAVE_ACCOUNT,
+		'account':account,
+	}
+}

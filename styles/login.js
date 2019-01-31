@@ -20,6 +20,7 @@ var styles = StyleSheet.create({
     },
 
     loginMain: {
+
       justifyContent:'center',
       alignItems: 'center',
       backgroundColor:'#00000077',
@@ -28,7 +29,6 @@ var styles = StyleSheet.create({
       paddingBottom: 60,
       paddingLeft:30,
       paddingRight: 30,
-
 
     },
 
@@ -39,6 +39,8 @@ var styles = StyleSheet.create({
       backgroundColor: '#fff',
       height: 330,
       borderRadius: 20,
+      borderWidth:1,
+      borderColor:'red',
     },
 
     companyCulture: {
@@ -62,6 +64,8 @@ var styles = StyleSheet.create({
       width: 300,
       height: 120,
       borderRadius: 8,
+      borderWidth:1,
+      borderColor:'black',
     },
 
     formInput:{

@@ -5,6 +5,7 @@ import * as TYPES from '../actions/types';
 const initialState = {
 	isLoggedIn: false,
 	user: {},
+	account:{},
 	status: null,
 };
 
@@ -38,6 +39,11 @@ export default function user(state=initialState, action){
 				isLoggedIn: false,
 				user: {},
 				status: 'error'
+			};
+		case TYPES.SAVE_ACCOUNT:
+			return {
+				...state,
+				account:action.account,
 			}
 
 		default: 

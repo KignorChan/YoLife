@@ -50,17 +50,33 @@ export default class DataUtil{
         return true;
     }
 
-    static async uploadPhoto(uri, uid){
-        alert(uri+'\n'+uid)
-        // const response = await fetch(uri);
-        // const blob = await response.blob();
-        // const ref = firebase
-        // .storage()
-        // .ref()
-        // .child('/images/avatar/'+uid);
-        //const snapshot = await ref.put(blob);
-        //console.log(JSON.stringify(snapshot))
-        //return snapshot.downloadURL;
-    };
-
+    static async uploadPhoto(uri, uid) {
+        return new Promise(async function(resolve, reject){
+            const blob = await new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function() {
+                  resolve(xhr.response);
+                };
+                xhr.onerror = function(e) {
+                  console.log(e);
+                  reject(new TypeError('Network request failed'));
+                };
+                xhr.responseType = 'blob';
+                xhr.open('GET', uri, true);
+                xhr.send(null);
+              });
+            
+              const ref = firebase
+                .storage()
+                .ref()
+                .child('/images/avatar/'+uid+'.jpg');
+              let snapshot = await ref.put(blob);
+              let url = await snapshot.ref.getDownloadURL();
+              //console.log('RESULT'+JSON.stringify(url))
+              // We're done with the blob, close and release it
+              blob.close();
+            
+              return resolve(url);
+        })
+      }
 }

@@ -30,16 +30,19 @@ import {
 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import * as firebase from 'firebase';
-import DeviceSetting from '../utils/DeviceSetting';
-import DataUtil from  '../utils/DataUtil';
 import {Toast} from 'teaset';
 import { parsePhoneNumberFromString } from 'libphonenumber-js/max';
 import Modal from "react-native-modal";
 import { resolve } from 'uri-js';
 import { reject } from 'rsvp';
 import FileUploader from "react-firebase-file-uploader";
+import { connect } from 'react-redux';
 
 
+import DeviceSetting from '../utils/DeviceSetting';
+import DataUtil from  '../utils/DataUtil';
+
+import '../utils/AdroidTimeout';
 
 //import { Platform } from 'expo-core';
 
@@ -50,10 +53,11 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const HEADER_HEIGHT = height*0.25;
 const AVATAR_SIZE = HEADER_HEIGHT*0.5;
-const DEFAULT_IMAGE_SOURCE = 'https://firebasestorage.googleapis.com/v0/b/yolife-541a7.appspot.com/o/images%2Favatar%2FSwhzLFSDZNMFZRZx8L2L6bJvTyx1.jpg?alt=media&token=d10f8821-385a-45ee-b1d6-5cc066c50fc5';
+const DEFAULT_IMAGE_SOURCE = require('../assets/images/qq.jpg');
+const LOADING_AVATAR = require('../assets/images/loadingAvatar.gif')
 
 
-export default class RegistMoreInfo extends React.Component {
+class RegistMoreInfo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -68,12 +72,13 @@ export default class RegistMoreInfo extends React.Component {
       photoURL:'',
       image: null,
       uploading: false,
-      showImageGrabModal:false
+      showImageGrabModal:false,
+      loadingAvatar:false,
     };
   }
 
   async componentWillMount() {
-    console.log(JSON.stringify(this.props.account.user.uid));
+    console.log('ACCCC'+JSON.stringify(this.props.account));
 
     try{
       await Font.loadAsync({
@@ -214,12 +219,16 @@ export default class RegistMoreInfo extends React.Component {
     }
 
     ImagePicker.launchImageLibraryAsync({
-        mediaTypes:'Images'
+        mediaTypes:'Images',
+        quality:0.1
     }).then(image=>{
-        console.log('IMAGE: '+JSON.stringify(image));
+      this.setState({showImageGrabModal:false, loadingAvatar:true})
         if (!image.cancelled) {
-            this.uploadPhoto(image.uri, this.props.account.user.uid)
-            this.setState({ image: image.uri, photoURL: photoURL });
+            DataUtil.uploadPhoto(image.uri, this.props.account.user.uid).then(photoURL=>{
+              this.setState({ photoURL, loadingAvatar:false});
+            }).catch(()=>{
+              console.log('get url failed!')
+            })
         }else{
             console.log('CANCEL!');
         }
@@ -234,11 +243,16 @@ export default class RegistMoreInfo extends React.Component {
 
     
     ImagePicker.launchCameraAsync({
-        allowsEditing:true
+        allowsEditing:true,
+        quality:0.1,
     }).then(image=>{
-        //console.log('IMAGE: '+JSON.stringify(image));
+      this.setState({showImageGrabModal:false, loadingAvatar:true})
         if (!image.cancelled) {
-            this.setState({ image: image.uri });
+          DataUtil.uploadPhoto(image.uri, this.props.account.user.uid).then(photoURL=>{
+            this.setState({ photoURL, loadingAvatar:false});
+          }).catch(()=>{
+            console.log('get url failed!')
+          })
         }else{
             console.log('CANCEL!');
         }
@@ -246,20 +260,6 @@ export default class RegistMoreInfo extends React.Component {
         console.log('Image picker error: '+ JSON.stringify(e));
     })
   }
-
-    async uploadPhoto(uri, uid){
-        //alert(uid);
-        //this.setState({loading:true});
-        const response = await fetch(uri);
-        const blob = await response.blob();
-        var storageRef = firebase.storage().ref().child('/images/avatar/'+uid+'.jpg');
-        storageRef.put(blob, {contentType: 'image/jpg'}).then(()=>storageRef.getDownloadURL()).then(downloadURI=>{
-            console.log(downloadURI);
-            this.setState({photoURL:downloadURI, showImageGrabModal:false});
-        }).catch(e=>{
-            console.log('ERRRR'+e)
-        })
-    };
 
   render() {
     if(this.state.loading){
@@ -280,19 +280,34 @@ export default class RegistMoreInfo extends React.Component {
                 alignItems:'center',
             }}>
                 <TouchableOpacity onPress={()=>{this.setState({showImageGrabModal:true})}}>
-                {this.state.photoURL!==''?
+                {this.state.photoURL&&!this.state.loadingAvatar?
                 <Image source={{uri:this.state.photoURL}} style={{
                     height:AVATAR_SIZE, 
                     width:AVATAR_SIZE, 
                     borderRadius: AVATAR_SIZE/2,
                     marginBottom:10
                 }}/>
-                :<Image source={{uri:DEFAULT_IMAGE_SOURCE}} style={{
+                :null
+                }
+
+                {
+                  this.state.loadingAvatar?
+                  <Image source={LOADING_AVATAR} style={{
+                      height:AVATAR_SIZE, 
+                      width:AVATAR_SIZE, 
+                      borderRadius: AVATAR_SIZE/2,
+                      marginBottom:10
+                  }}/>:null
+                }
+                
+                {
+                !this.state.loadingAvatar&&!this.state.photoURL?
+                <Image source={DEFAULT_IMAGE_SOURCE} style={{
                     height:AVATAR_SIZE, 
                     width:AVATAR_SIZE, 
                     borderRadius: AVATAR_SIZE/2,
                     marginBottom:10
-                }}/>
+                }}/>:null
                 }
 
                 </TouchableOpacity>
@@ -319,51 +334,6 @@ export default class RegistMoreInfo extends React.Component {
             }}
             keyboardType='numeric'
             />
-            {/*<Fumi
-              label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.firstName}
-              iconClass={FontAwesomeIcon}
-              iconName={'user'}
-              iconColor={'#f95a25'}
-              iconSize={20}
-              onChangeText={value =>
-                this.debouncedSetState({ firstName: value })
-              }
-              keyboardType='email-address'
-            />
-            <Fumi
-              label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.lastName}
-              iconClass={FontAwesomeIcon}
-              iconName={'user'}
-              iconColor={'#f95a25'}
-              iconSize={20}
-              onChangeText={value =>
-                this.debouncedSetState({ lastName: value })
-              }
-              
-            />
-
-            <Fumi
-                iconClass={FontAwesomeIcon}
-                iconName={'phone'}
-                iconColor={'#f95a25'}
-                iconSize={20}
-                label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.phoneNumber}
-                onChangeText={value =>
-                  this.debouncedSetState({ mobile: value })
-                }
-                keyboardType='numeric'
-            />*/}
-
-              {/* <TouchableOpacity onPress={this.renderUserTypeSelection.bind(this)}>
-              <View style={{flex: 1, paddingTop:20, flexDirection:'row'}}>
-  
-                <Text style={{fontSize:16, fontWeight:'bold'}}>Sign up as:</Text>
-                <Text style={{fontSize:16, marginLeft:20}}>{this.state.dropdownText}</Text>
-                </View>
-
-              </TouchableOpacity> */}
-
-
             {this.state.message.length > 0 ? (
               <Text>{this.state.message}</Text>
             ) : null}
@@ -424,3 +394,19 @@ export default class RegistMoreInfo extends React.Component {
     );
   }
 }
+
+function mapStateToProps(store){
+  return{
+    account: store.userStore.account,
+  }
+}
+
+function mapDispatchToProps(){
+   return {
+  //   saveAccount(dispatch){
+  //       dispatch(saveAccount(account));
+  //   }
+   }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegistMoreInfo)

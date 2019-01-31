@@ -31,9 +31,12 @@ import * as firebase from 'firebase';
 import DeviceSetting from '../utils/DeviceSetting';
 import DataUtil from  '../utils/DataUtil';
 import {Toast} from 'teaset';
-import { parsePhoneNumberFromString } from 'libphonenumber-js/max'
+import { parsePhoneNumberFromString } from 'libphonenumber-js/max';
+import { connect } from 'react-redux';
+import { saveAccount } from '../redux/actions/user';
 
-export default class RegisterView extends React.Component {
+
+class Register extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -106,9 +109,18 @@ export default class RegisterView extends React.Component {
       }
 
       firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(account=>{
-        //console.log(JSON.stringify(user));
-        Actions.push('registmoreinfo', {account});
+        console.log(JSON.stringify(account.user.lastLoginAt))
+        var user = {
+          uid: account.user.uid,
+          email:account.user.email,
+          phoneNumber:account.user.phoneNumber,
+          lastLoginAt:account.user.metadata.lastSignInTime,
+          createdAt: account.user.metadata.creationTime,
+          photoURL:account.user.photoURL,
+        }
+        this.props.saveAccount(user);
         this.setState({loading:false});
+        Actions.push('registmoreinfo');
       }).catch(e=>{
         console.log(JSON.stringify(e))
         alert('Something error!')
@@ -283,3 +295,19 @@ export default class RegisterView extends React.Component {
     );
   }
 }
+
+function mapStateToProps(store){
+  return {
+
+  }
+}
+
+function mapDispatchToProps(dispatch){
+  return {
+    saveAccount(account){
+        dispatch(saveAccount(account));
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register)

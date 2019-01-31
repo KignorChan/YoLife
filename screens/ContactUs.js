@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import DeviceSetting from '../utils/DeviceSetting';
+import { Actions } from 'react-native-router-flux';
+
 
 export default ContactUs = () => {
     return (
@@ -35,6 +37,19 @@ export default ContactUs = () => {
                 <Text>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.wechat+': '}</Text>
                 <Text>6477565465</Text>
             </View>
+
+            <TouchableOpacity style={{
+                flexDirection:'row', 
+                justifyContent:'center', 
+                alignItems:'center',
+                backgroundColor:'#fff',
+                padding:20,
+                marginTop:20
+            }}
+                onPress={()=>{Actions.push('feedback')}}
+            >
+                <Text style={{fontSize:20, fontWeight:'bold'}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.feedback}</Text>
+            </TouchableOpacity>
         </View>
     )
 }

@@ -70,6 +70,21 @@ class Setting extends React.Component{
                         />
                     </TouchableOpacity>
 
+                    <TouchableOpacity style={[styles.buttonContainer,{marginTop:20}]} onPress={()=>{}}>
+                        <EntypoIcon 
+                            name={'info-with-circle'}
+                            size={25}
+                            color='#000'
+                            style={styles.buttonIcon}
+                        />
+                        <Text style={styles.buttonText}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.aboutUs}</Text>
+                        <Icon 
+                            name={'ios-arrow-forward'}
+                            size={25}
+                            style={styles.buttonArrowIcon}
+                        />
+                    </TouchableOpacity>
+
                     <TouchableOpacity style={[styles.buttonContainer,{marginTop:20}]} onPress={()=>{this.props.gotoLogout();Actions.pop()}}>
                         <EntypoIcon 
                             name={'log-out'}

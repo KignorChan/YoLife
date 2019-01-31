@@ -11,13 +11,17 @@ import Home from './screens/Home';
 import OrderHistory from './screens/order/OrderHistory';
 import MyCenter from './screens/MyCenter';
 import Setting from './screens/Setting';
-import Login from './screens/login/login'
-import Register from './screens/login/regis';
+import Login from './screens/Login'
+import Register from './screens/Register';
 import LanguagesSetting from './screens/LanguagesSetting';
 import ContactUs from './screens/ContactUs';
 import Profile from './screens/Profile';
 import LocationSetting from './screens/LocationSetting';
 import AddBusinesses from './screens/AddBusinesses';
+import Feedback from './screens/Feedback';
+import RegistMoreInfo from './screens/RegistMoreInfo';
+
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -100,7 +104,7 @@ export default class Root extends React.Component {
             key="login"
             component={Login}
             title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.login}
-            hideNavBar={false}/>
+            hideNavBar={true}/>
         
         <Scene 
             key="register"
@@ -124,6 +128,18 @@ export default class Root extends React.Component {
             key="addbusinesses"
             component={AddBusinesses}
             title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.newBusiness}
+            hideNavBar={false}/>
+
+        <Scene 
+            key="feedback"
+            component={Feedback}
+            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.feedback}
+            hideNavBar={false}/>
+
+        <Scene 
+            key="registmoreinfo"
+            component={RegistMoreInfo}
+            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.moreInfo}
             hideNavBar={false}/>
 
       

@@ -20,9 +20,16 @@ var styles = StyleSheet.create({
     },
 
     loginMain: {
-      flex:1,
-      borderWidth:1,
-      borderColor:'black',
+
+      justifyContent:'center',
+      alignItems: 'center',
+      backgroundColor:'#00000077',
+      borderRadius:10,
+      paddingTop:60,
+      paddingBottom: 60,
+      paddingLeft:30,
+      paddingRight: 30,
+
     },
 
     loginMainCon: {
@@ -93,7 +100,6 @@ var styles = StyleSheet.create({
     },
 
     btnWrap:{
-      marginTop: 150,
       borderRadius: 5,
       height: 50,
     },

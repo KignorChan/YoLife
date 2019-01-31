@@ -1,4 +1,4 @@
-//import firebase from 'firebase';
+import firebase from 'firebase';
 
 
 export default class DataUtil{
@@ -49,5 +49,18 @@ export default class DataUtil{
         }
         return true;
     }
+
+    static async uploadPhoto(uri, uid){
+        alert(uri+'\n'+uid)
+        // const response = await fetch(uri);
+        // const blob = await response.blob();
+        // const ref = firebase
+        // .storage()
+        // .ref()
+        // .child('/images/avatar/'+uid);
+        //const snapshot = await ref.put(blob);
+        //console.log(JSON.stringify(snapshot))
+        //return snapshot.downloadURL;
+    };
 
 }

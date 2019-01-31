@@ -5,14 +5,13 @@ import {
   View,
   Platform,
   TextInput,
+  StyleSheet,
   ImageBackground,
   Image,
-  AlertIOS,
   TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux';
 import ModalBox from 'react-native-modalbox';
-import Spinner from 'react-native-spinkit';
 import { logIn, skipLogin } from '../../redux/actions/user';
 import commonStyle from '../../styles/common';
 import loginStyle from '../../styles/login';
@@ -35,6 +34,7 @@ class LoginPage extends Component{
     }
 
     handleLogin(){
+        alert("111111");
         const { username, password } = this.state;
         if (!username || !password) {
             return;
@@ -69,10 +69,7 @@ class LoginPage extends Component{
         const { username, password, modalVisible } = this.state;
         return (
             <View style={[commonStyle.wrapper, loginStyle.loginWrap]}>
-                <ImageBackground
-                    source={require('../../imgs/icons/bg.png')}
-                    style={{ resizeMode: 'stretch', flex: 1 }}
-                >
+              
                     <View style={loginStyle.loginMain}>
                         <View style={loginStyle.loginMainCon}>
                             <View style={loginStyle.companyCulture}>
@@ -114,24 +111,62 @@ class LoginPage extends Component{
                                     </View>
                                 </View>
                             </View>
-                            <View style={loginStyle.btn}>
-                                <TouchableOpacity style={loginStyle.btnWrap} onPress={this.handleLogin}>
-                                    <Text style={loginStyle.loginBtn1} >Log in</Text>
+                            <View style={styles.btn}>
+                                <TouchableOpacity style={styles.btnWrap} onPress={()=>{this.handleLogin();}}>
+                                    <Text style={styles.loginBtn1} >Log in</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={loginStyle.btnWrap} onPress={this.handleRegister}>
-                                    <Text style={loginStyle.loginBtn2}>Register</Text>
+                                <TouchableOpacity style={styles.btnWrap} onPress={alert('1111')}>
+                                    <Text style={styles.loginBtn2}>Register</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
                         
                         
                     </View>
-                </ImageBackground>
+                
 
             </View>
         );
     }
 }
+
+var styles = StyleSheet.create({
+    btn: {
+        flexDirection:'row',
+      },
+  
+      btnWrap:{
+        marginTop: 150,
+        borderRadius: 5,
+        height: 50,
+      },
+    
+      loginBtn1: {
+          fontSize: 20,
+          color: '#ffffff',
+          backgroundColor: 'transparent',
+          width: 150,
+          height: 50,
+          borderWidth: 1,
+          borderColor: '#fff',
+          paddingTop: 15,
+          marginRight: 20,
+          flex: 1,
+          textAlign: 'center',
+      },  
+      loginBtn2: {
+        fontSize: 20,
+        color: '#C7D634',
+        backgroundColor: '#fff',
+        width: 150,
+        height: 50,
+        borderWidth: 1,
+        borderColor: '#fff',
+        paddingTop: 15,
+        flex: 1,
+        textAlign: 'center',
+      },
+})
 
 function mapState2Props(store){
     return {

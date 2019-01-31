@@ -8,7 +8,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import DeviceSetting from './utils/DeviceSetting';
 
 import Home from './screens/Home';
-import OrderHistory from './screens/OrderHistory';
+import OrderHistory from './screens/order/OrderHistory';
 import MyCenter from './screens/MyCenter';
 import Setting from './screens/Setting';
 import Login from './screens/login/login'

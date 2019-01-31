@@ -21,6 +21,8 @@ var styles = StyleSheet.create({
 
     loginMain: {
       flex:1,
+      borderWidth:1,
+      borderColor:'black',
     },
 
     loginMainCon: {
@@ -30,6 +32,8 @@ var styles = StyleSheet.create({
       backgroundColor: '#fff',
       height: 330,
       borderRadius: 20,
+      borderWidth:1,
+      borderColor:'red',
     },
 
     companyCulture: {
@@ -53,6 +57,8 @@ var styles = StyleSheet.create({
       width: 300,
       height: 120,
       borderRadius: 8,
+      borderWidth:1,
+      borderColor:'black',
     },
 
     formInput:{

@@ -72,7 +72,6 @@ export default class DataUtil{
                 .child('/images/avatar/'+uid+'.jpg');
               let snapshot = await ref.put(blob);
               let url = await snapshot.ref.getDownloadURL();
-              //console.log('RESULT'+JSON.stringify(url))
               // We're done with the blob, close and release it
               blob.close();
             

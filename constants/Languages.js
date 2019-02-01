@@ -54,7 +54,8 @@ export const LANGUAGES = {
         sendFeedback:'发送反馈',
         moreInfo:'更多信息',
         next:'下一步',
-        skip:'跳过'
+        skip:'跳过',
+        includeBusinessFeature:'包含商业功能'
     },
     ENGLISH:{
         home:'Home',
@@ -111,6 +112,8 @@ export const LANGUAGES = {
         sendFeedback:'Send feedback',
         moreInfo:'More info',
         next:'Next',
-        skip:'Skip'
+        skip:'Skip',
+        includeBusinessFeature:'Include business features'
+
     }
 }

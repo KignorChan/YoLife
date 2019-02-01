@@ -38,11 +38,10 @@ export default class OrderHistory extends Component {
   render() {
       return(
 
-        <View style={{flex:1}}>
+        <View style={{flex:1,backgroundColor:'#fff',}}>
             <View style={{
                     height:60, 
                     width:width, 
-                    backgroundColor:'#fff',
                 }}>
             </View>
             <View style={{  

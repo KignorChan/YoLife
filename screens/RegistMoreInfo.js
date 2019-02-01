@@ -16,6 +16,7 @@ import { Font, AppLoading } from "expo";
 import * as _ from 'lodash';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Isao,Fumi, Hoshi } from 'react-native-textinput-effects';
+import { CheckBox } from 'react-native-elements';
 import { Constants, ImagePicker, Permissions } from 'expo';
 import {
   Button,
@@ -37,6 +38,11 @@ import { resolve } from 'uri-js';
 import { reject } from 'rsvp';
 import FileUploader from "react-firebase-file-uploader";
 import { connect } from 'react-redux';
+import { saveAccount } from '../redux/actions/user';
+import axios from 'axios';
+import Qs from 'qs';
+
+import { CONSTANT_API } from '../constants/API';
 
 
 import DeviceSetting from '../utils/DeviceSetting';
@@ -74,11 +80,12 @@ class RegistMoreInfo extends React.Component {
       uploading: false,
       showImageGrabModal:false,
       loadingAvatar:false,
+      businessType:false
     };
   }
 
   async componentWillMount() {
-    console.log('ACCCC'+JSON.stringify(this.props.account));
+    //console.log('ACCCC'+JSON.stringify(this.props.account));
 
     try{
       await Font.loadAsync({
@@ -194,23 +201,6 @@ class RegistMoreInfo extends React.Component {
       ],
       { cancelable: false }
     )
-
-    // return (
-    //   <DropdownMenu
-    //     style={{flex: 1}}
-    //     bgColor={'white'}
-    //     tintColor={'#666666'}
-    //     activityTintColor={'green'}
-    //     // arrowImg={}      
-    //     // checkImage={}   
-    //     // optionTextStyle={{color: '#333333'}}
-    //     // titleStyle={{color: '#333333'}} 
-    //     maxHeight={300} 
-    //     handler={(selection, row) => this.setState({dropdownText: this.state.userType[selection][row]})}
-    //     data={this.state.userType}
-    //   >
-    //   </DropdownMenu>
-    // );
   }
 
   async _renderImagePicker(){
@@ -224,7 +214,7 @@ class RegistMoreInfo extends React.Component {
     }).then(image=>{
       this.setState({showImageGrabModal:false, loadingAvatar:true})
         if (!image.cancelled) {
-            DataUtil.uploadPhoto(image.uri, this.props.account.user.uid).then(photoURL=>{
+            DataUtil.uploadPhoto(image.uri, this.props.account.uid).then(photoURL=>{
               this.setState({ photoURL, loadingAvatar:false});
             }).catch(()=>{
               console.log('get url failed!')
@@ -241,14 +231,13 @@ class RegistMoreInfo extends React.Component {
     await Permissions.askAsync(Permissions.CAMERA);
     await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
-    
     ImagePicker.launchCameraAsync({
         allowsEditing:true,
         quality:0.1,
     }).then(image=>{
       this.setState({showImageGrabModal:false, loadingAvatar:true})
         if (!image.cancelled) {
-          DataUtil.uploadPhoto(image.uri, this.props.account.user.uid).then(photoURL=>{
+          DataUtil.uploadPhoto(image.uri, this.props.account.uid).then(photoURL=>{
             this.setState({ photoURL, loadingAvatar:false});
           }).catch(()=>{
             console.log('get url failed!')
@@ -257,8 +246,100 @@ class RegistMoreInfo extends React.Component {
             console.log('CANCEL!');
         }
     }).catch(e=>{
-        console.log('Image picker error: '+ JSON.stringify(e));
+        console.log('Image error: '+ JSON.stringify(e));
     })
+  }
+
+  _nextOnPress(){
+    if(!DataUtil.check_phone_format(this.state.mobile)){
+      Toast.sad("The mobile format is not right!");
+      return;
+    }
+
+    const phoneNumber = parsePhoneNumberFromString(this.state.mobile, 'CA');
+
+    if(phoneNumber){
+        if(!phoneNumber.isValid()){
+            Toast.sad("The phone number is not valid!");
+            return;
+        }
+    }
+
+    var account = this.props.account;
+    account.firstName = this.state.firstName;
+    account.lastName = this.state.lastName;
+    account.photoURL = this.state.photoURL;
+    account.phoneNumber = this.state.mobile;
+    account.userType = 'customer';
+    account.comeFrom = 'firebase';
+
+    if(this.state.businessType){
+      account.isOwner = true;
+      account.userType = account.userType+',business';
+    }else{
+      account.isOwner = false;
+    }
+
+    var address = {
+      address:'4580 Dufferin Street',
+      latitude: 78.84573,
+      longitude: -144.347567,
+    }
+
+    addressList = [];
+    addressList.push(address);
+
+    account.addressList = addressList;
+
+    console.log(JSON.stringify(account));
+
+    // var account = {
+    //   account:'hello world'
+    // }
+
+    //account = JSON.stringify(account)
+
+    axios.post(CONSTANT_API.addUsers, account).then(res=>{
+      console.log(JSON.stringify(res));
+    }).catch(e=>{
+      console.log(JSON.stringify(e))
+    })
+
+    // axios({
+    //   headers: {
+    //         'Accept': 'application/json',
+    //         'Content-Type': 'application/json'
+    //       },
+    //   method:'POST',
+    //   url:CONSTANT_API.addUsers,
+    //   data:Qs.stringify(account)
+    // })
+
+    // fetch(CONSTANT_API.addUsers, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: {
+    //     account: JSON.stringify({account:'aaa'})
+    //   },
+    //   }).then((response)=>{
+		// 		if (response.ok) {
+		// 			console.log('response');
+		// 			console.log(response);
+		// 			return response.json();
+		// 		}
+		// 	}).then((resJson)=>{
+		// 		console.log('resJson');
+		// 		console.log(resJson);
+		// 		//dispatch({'type': TYPES.LOGGED_IN, user: resJson.rows[0]});
+		// 	}).catch((e)=>{
+		// 		console.log(e);
+		// 		//AlertIOS.alert(e.message);
+		// 		//dispatch({'type': TYPES.LOGGED_ERROR, error: e});
+		// 	});
+    
   }
 
   render() {
@@ -334,6 +415,12 @@ class RegistMoreInfo extends React.Component {
             }}
             keyboardType='numeric'
             />
+            <CheckBox
+              center
+              title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.includeBusinessFeature}
+              checked={this.state.businessType}
+              onPress={()=>{this.setState({businessType:!this.state.businessType})}}
+            />
             {this.state.message.length > 0 ? (
               <Text>{this.state.message}</Text>
             ) : null}
@@ -355,7 +442,7 @@ class RegistMoreInfo extends React.Component {
               <Text style={{ color: 'white' }}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.skip}</Text>
             </Button>
             <Button
-                onPress={() => this.register()}
+                onPress={() => this._nextOnPress()}
                 disabled={this.state.loading}
             >
                 <Text style={{ color: 'white' }}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.next}</Text>
@@ -403,9 +490,9 @@ function mapStateToProps(store){
 
 function mapDispatchToProps(){
    return {
-  //   saveAccount(dispatch){
-  //       dispatch(saveAccount(account));
-  //   }
+    saveAccount(dispatch){
+        dispatch(saveAccount(account));
+    }
    }
 }
 

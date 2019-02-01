@@ -4,6 +4,10 @@ import { Router, Scene, Actions, Tabs, Stack, Drawer } from 'react-native-router
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { Constants, Location, Permissions } from 'expo';
+
+import { connect } from 'react-redux';
+import { saveLocation } from './redux/actions/user';
 
 import DeviceSetting from './utils/DeviceSetting';
 
@@ -20,6 +24,7 @@ import LocationSetting from './screens/LocationSetting';
 import AddBusinesses from './screens/AddBusinesses';
 import Feedback from './screens/Feedback';
 import RegistMoreInfo from './screens/RegistMoreInfo';
+import AddressInputView from './screens/AddressInputView';
 
 
 
@@ -27,7 +32,7 @@ const { width, height } = Dimensions.get('window');
 
 const TABBAR_HEIGHT = height*0.08;
 
-export default class Root extends React.Component {
+class Root extends React.Component {
 
   icon = (result)=>{
     console.log(JSON.stringify(result));
@@ -36,13 +41,41 @@ export default class Root extends React.Component {
     )
   }
 
+  componentDidMount(){
+    if (Platform.OS === 'android' && !Constants.isDevice) {
+      this.setState({
+      errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
+      });
+    } else {
+      setInterval(()=>
+      {
+        this._getLocationAsync()
+      } 
+      ,30000);
+    }
+  }
+
+  async _getLocationAsync(){
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: 'Permission to access location was denied',
+      });
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    this.setState({ location });
+    this.props.saveLocation(location);
+  };
+
+
   _renderScenes(){
     return (
       <Scene key="root" hideNavBar>
         <Tabs tabBarStyle={{height:TABBAR_HEIGHT}} swipeEnabled={true} >
           <Scene 
             key="home" 
-            initial 
+             
             component={Home} 
             title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.home}
             icon={({focused})=>{
@@ -52,6 +85,7 @@ export default class Root extends React.Component {
                 return (<MaterialCommunityIcons name='home-outline' size={30} />)
               }
             }} 
+            
             hideNavBar/>
       
           <Scene 
@@ -142,6 +176,12 @@ export default class Root extends React.Component {
             title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.moreInfo}
             hideNavBar={false}/>
 
+        <Scene 
+            key="addressinputview"
+            component={AddressInputView}
+            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.address}
+            hideNavBar={false} initial/>
+
       
       </Scene>
     );
@@ -168,3 +208,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+function mapStateToProps(store){
+  return {
+  }
+}
+
+function mapDispatchToProps(dispatch){
+  return{
+    saveLocation(location){
+      dispatch(saveLocation(location));
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Root);

@@ -42,7 +42,7 @@ import { saveAccount } from '../redux/actions/user';
 import axios from 'axios';
 import Qs from 'qs';
 
-import { CONSTANT_API } from '../constants/API';
+import { CONSTANT_API, ADDRESS_TYPE } from '../constants/Constants';
 
 
 import DeviceSetting from '../utils/DeviceSetting';
@@ -80,7 +80,8 @@ class RegistMoreInfo extends React.Component {
       uploading: false,
       showImageGrabModal:false,
       loadingAvatar:false,
-      businessType:false
+      businessType:false,
+      address:null,
     };
   }
 
@@ -102,105 +103,6 @@ class RegistMoreInfo extends React.Component {
   async componentDidMount(){
     await Permissions.askAsync(Permissions.CAMERA_ROLL);
     await Permissions.askAsync(Permissions.CAMERA);
-  }
-
-  register = () => {
-    if(this.state.email===''){
-        Toast.sad("Please enter your email!");
-        return;
-    }
-
-    if(this.state.password===''){
-        Toast.sad("Please enter your password!");
-        return;
-    }
-
-    if(!DataUtil.check_email_format(this.state.email)){
-      Toast.sad("The email format is not right!");
-      return;
-    }
-    if(!DataUtil.check_phone_format(this.state.mobile)){
-      Toast.sad("The mobile format is not right!");
-      return;
-    }
-    if (this.state.password != '' && this.state.password != null){
-        if(this.state.password.length<6 || this.state.password.length > 14 ){
-            Toast.sad("The password length is between 6 and 14!");
-            //this.setState({ message: 'the password length is between 6 and 14!', confirmed: false });
-            return;
-        }
-    }
-    if (this.state.password !== this.state.passwordConfirm) {
-      //this.setState({ message: 'Password does not match', confirmed: false });
-      Toast.sad('Password does not match');
-      return ;
-    } else {
-      this.setState({ message: 'Loading...', loading: true, confirmed: true });
-
-      const phoneNumber = parsePhoneNumberFromString(this.state.mobile, 'CA');
-
-      if(phoneNumber){
-          if(!phoneNumber.isValid()){
-              Toast.sad("The phone number is not valid!");
-              return;
-          }
-      }
-
-      firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(user=>{
-        console.log(JSON.stringify(user));
-      })
-
-
-
-
-      
-    //   FireBase.signup(this.state.username, this.state.password)
-    //     .then(result => {
-    //       FireBase.updateUserType(result.uid, this.state.dropdownText);
-    //       //if(result.emailVerified){
-    //         FireBase.login(false, {
-    //           email: this.state.username,
-    //           password: this.state.password,
-    //         })
-    //           .then(r1 => {
-    //             FireBase.getDatabase().ref('users/'+result.uid).on('value',snapshot=>{
-    //               var user = snapshot.val();
-    //               Authentication.saveItem('userId', result.uid);
-    //               Authentication.saveItem('userEmail', this.state.username);
-    //               FireBase.currentUser.userType = user.userType;
-    //             });
-  
-    //             Actions.push('mainPage');
-    //           })
-    //           .catch(e => {
-    //             console.log(e.message);
-    //             this.setState({ message: e.message, loading: false });
-    //           });
-    //       // }else{
-    //       //   Actions.push('emailVerification',{from:'registerView'})
-    //       // }
-          
-    //     })
-    //     .catch(error => {
-    //       // Handle Errors here.
-    //       const errorCode = error.code;
-    //       const errorMessage = error.message;
-    //       this.setState({ message: error.message, loading: false });
-    //     });
-    }
-  };
-
-  renderUserTypeSelection(){
-    Alert.alert(
-      'Account Type',
-      'Please choose an account type:',
-      [
-        {text: 'customer', onPress: () => this.setState({dropdownText: 'customer'})},
-        {text: 'business', onPress: () => this.setState({dropdownText: 'business'})},
-        {text: 'Cancel', onPress: () => console.log('cancel pressed!')},
-      ],
-      { cancelable: false }
-    )
   }
 
   async _renderImagePicker(){
@@ -281,6 +183,7 @@ class RegistMoreInfo extends React.Component {
     }
 
     var address = {
+      addressType:ADDRESS_TYPE.userHome,
       address:'4580 Dufferin Street',
       latitude: 78.84573,
       longitude: -144.347567,
@@ -304,43 +207,21 @@ class RegistMoreInfo extends React.Component {
     }).catch(e=>{
       console.log(JSON.stringify(e))
     })
-
-    // axios({
-    //   headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json'
-    //       },
-    //   method:'POST',
-    //   url:CONSTANT_API.addUsers,
-    //   data:Qs.stringify(account)
-    // })
-
-    // fetch(CONSTANT_API.addUsers, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: {
-    //     account: JSON.stringify({account:'aaa'})
-    //   },
-    //   }).then((response)=>{
-		// 		if (response.ok) {
-		// 			console.log('response');
-		// 			console.log(response);
-		// 			return response.json();
-		// 		}
-		// 	}).then((resJson)=>{
-		// 		console.log('resJson');
-		// 		console.log(resJson);
-		// 		//dispatch({'type': TYPES.LOGGED_IN, user: resJson.rows[0]});
-		// 	}).catch((e)=>{
-		// 		console.log(e);
-		// 		//AlertIOS.alert(e.message);
-		// 		//dispatch({'type': TYPES.LOGGED_ERROR, error: e});
-		// 	});
     
   }
+
+  handleAddressInput = async address => {
+    //this.setState({ showModalDropdown: true, address });
+    try {
+      if (address.length > 2) {
+        const addressSuggestions = await DataUtil.getAutocompleteResult(address);
+        //this.setState({ addressSuggestions });
+        console.log(JSON.stringify(addressSuggestions));
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   render() {
     if(this.state.loading){
@@ -413,6 +294,12 @@ class RegistMoreInfo extends React.Component {
             onChangeText={(value)=>{
               this.setState({ mobile: value })
             }}
+            keyboardType='numeric'
+            />
+            <Hoshi
+            label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.address}
+            borderColor={'#b76c94'}
+            onChangeText={this.handleAddressInput}
             keyboardType='numeric'
             />
             <CheckBox

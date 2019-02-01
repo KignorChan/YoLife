@@ -1,5 +1,12 @@
+import { Dimensions } from 'react-native';
+import React from 'react';
 import firebase from 'firebase';
+import { CONSTANT_API } from '../constants/Constants';
+import * as _ from 'lodash';
+import axios from 'axios';
 
+const { width, height } = Dimensions.get('window');
+const ASPECT_RATIO = width / height;
 
 export default class DataUtil{
 
@@ -77,5 +84,79 @@ export default class DataUtil{
             
               return resolve(url);
         })
+      }
+
+      static getAutocompleteResult(address) {
+        return new Promise((resolve, reject) => {
+          const addressParameter = `input=${_.replace(
+            address,
+            new RegExp(' ', 'g'),
+            '+'
+          )}`;
+          const apiParameter = `&key=${CONSTANT_API.GOOGLE_PLACES_API_KEY}`;
+        //   const countryLimitParameter = '&components=country:us|country:ca';
+          const countryLimitParameter = '&components=country:ca';
+          const sessionTokenParameter = `&sessiontoken=1234567890`;
+          axios
+            .get(
+              `https://maps.googleapis.com/maps/api/place/autocomplete/json?${addressParameter}${apiParameter}${countryLimitParameter}${sessionTokenParameter}`
+            )
+            .then(responseJson => {
+              if (responseJson.status == 'ZERO RESULTS') {
+                reject('Invalid address');
+              } else {
+                resolve(responseJson.data.predictions);
+              }
+            })
+            .catch(e => reject(e));
+        });
+      }
+
+      static getAddressFromCoord(lat, lon) {
+        return new Promise((resolve, reject) => {
+          const latLonParameter = `latlng=${lat},${lon}`;
+          const apiParameter = `&key=${CONSTANT_API.GOOGLE_GEOCODE_API_KEY}`;
+          const filterParameter = `&result_type=street_address`;
+      
+          axios
+            .get(
+              `https://maps.googleapis.com/maps/api/geocode/json?${latLonParameter}${apiParameter}${filterParameter}`
+            )
+            .then(responseJson => {
+              if (responseJson.status == 'ZERO RESULTS') {
+                reject('Invalid address');
+              } else {
+                const selectedAddress = responseJson.data.results[0];
+                const latDelta = Math.abs(
+                  selectedAddress.geometry.viewport.northeast.lat -
+                    selectedAddress.geometry.viewport.southwest.lat
+                );
+                const lngDelta = latDelta * ASPECT_RATIO;
+                const fullAddress = selectedAddress.formatted_address.substring(
+                  0,
+                  selectedAddress.formatted_address.indexOf(',')
+                );
+                const additionalAddressInfo = selectedAddress.formatted_address.substring(
+                  selectedAddress.formatted_address.indexOf(',') + 1
+                );
+                const addressDetails = {
+                  markerPosition: {
+                    latitude: selectedAddress.geometry.location.lat,
+                    longitude: selectedAddress.geometry.location.lng,
+                  },
+                  fullAddress,
+                  latitudeDelta: latDelta,
+                  longitudeDelta: lngDelta,
+                  additionalAddressInfo,
+                };
+                resolve(addressDetails);
+              }
+            })
+            .catch(e => {
+              console.log("error"+JSON.stringify(e));
+      
+              reject(e);
+            });
+        });
       }
 }

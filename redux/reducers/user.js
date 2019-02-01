@@ -7,6 +7,7 @@ const initialState = {
 	user: {},
 	account:{},
 	status: null,
+	location:{}
 };
 
 export default function user(state=initialState, action){
@@ -44,7 +45,12 @@ export default function user(state=initialState, action){
 			return {
 				...state,
 				account:action.account,
-			}
+			};
+		case TYPES.SAVE_LOCATION:
+			return {
+				...state,
+				location:action.location,
+			};
 
 		default: 
 			return state;

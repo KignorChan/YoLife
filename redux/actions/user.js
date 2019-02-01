@@ -74,3 +74,10 @@ export function saveAccount(account){
 		'account':account,
 	}
 }
+
+export function saveLocation(location){
+	return {
+		'type': TYPES.SAVE_LOCATION,
+		'location':location,
+	}
+}

@@ -19,10 +19,13 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Makiko } from 'react-native-textinput-effects';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import { Font, AppLoading } from "expo";
+import {Toast} from 'teaset';
 import { logIn, skipLogin } from '../redux/actions/user';
+import firebase from 'firebase';
 import commonStyle from '../styles/common';
 import loginStyle from '../styles/login';
 import { Actions } from 'react-native-router-flux';
+
 
 import DeviceSetting from '../utils/DeviceSetting';
 
@@ -60,18 +63,38 @@ class LoginPage extends Component{
 
     handleLogin(){
         const { username, password } = this.state;
-        if (!username || !password) {
+        if (!username) {
+            Toast.sad(DeviceSetting.setting.APP_LANGUAGE_PACKAGE.pleaseEnterYourEmail);
             return;
         }
-        let opt = {
-            'name': this.state.username,
-            'password': this.state.password,
-        };
-        this.setState({
-            modalVisible: true
-        })
-        this.props.dispatch(logIn(opt));
-        Actions.pop();
+        if(!password){
+            Toast.sad(DeviceSetting.setting.APP_LANGUAGE_PACKAGE.pleaseEnterYourPassword);
+            return;
+        }
+        this.setState({loading:true});
+        firebase.auth().signInWithEmailAndPassword(username, password).then(result=>{
+            console.log('RESULT: '+JSON.stringify(result));
+            if(result){
+                if(result.user.emailVerified){
+                    Actions.pop();
+                    this.setState({loading:false});
+                }else{
+                    Actions.push('emailverification');
+                    this.setState({loading:false});
+                }
+            }
+        }).catch(e=>{
+            console.error(e);
+        });
+        // let opt = {
+        //     'name': this.state.username,
+        //     'password': this.state.password,
+        // };
+        // this.setState({
+        //     modalVisible: true
+        // })
+        //this.props.dispatch(logIn(opt));
+        //Actions.pop();
     }
 
     handleRegister(){
@@ -94,7 +117,9 @@ class LoginPage extends Component{
 
         if(this.state.loading){
             return (
-                <ActivityIndicator size="large" color="#0000ff" />
+                <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
+                    <ActivityIndicator size="large" color="#0000ff" />
+                </View>
             )
         }
 
@@ -114,7 +139,7 @@ class LoginPage extends Component{
                             />
                             <TextInput 
                                 ref="login_name" 
-                                placeholder={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.username}
+                                placeholder={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.email}
                                 style={loginStyle.loginInput} 
                                 onChangeText={this.onChangeName}
                                 value={username}

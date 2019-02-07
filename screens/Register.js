@@ -109,18 +109,18 @@ class Register extends React.Component {
       }
 
       firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(account=>{
-        console.log(JSON.stringify(account.user.lastLoginAt))
+        console.log('TIMESTAMP: '+ Date.parse(account.user.metadata.lastSignInTime))
         var user = {
           uid: account.user.uid,
           email:account.user.email,
           phoneNumber:account.user.phoneNumber,
-          lastLoginAt:account.user.metadata.lastSignInTime,
-          createdAt: account.user.metadata.creationTime,
+          lastLoginAt:Date.parse(account.user.metadata.lastSignInTime),
+          createdAt: Date.parse(account.user.metadata.creationTime),
           photoURL:account.user.photoURL,
         }
         this.props.saveAccount(user);
         this.setState({loading:false});
-        Actions.push('registmoreinfo');
+        Actions.push('emailverification');
       }).catch(e=>{
         console.log(JSON.stringify(e))
         alert('Something error!')

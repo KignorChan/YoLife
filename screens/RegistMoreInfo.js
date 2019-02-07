@@ -10,7 +10,9 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
-  Platform
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
 import { Font, AppLoading } from "expo";
 import * as _ from 'lodash';
@@ -81,13 +83,11 @@ class RegistMoreInfo extends React.Component {
       showImageGrabModal:false,
       loadingAvatar:false,
       businessType:false,
-      address:null,
+      address:'',
     };
   }
 
   async componentWillMount() {
-    //console.log('ACCCC'+JSON.stringify(this.props.account));
-
     try{
       await Font.loadAsync({
         Arial: require("../assets/fontFamily/Arial.ttf"),
@@ -107,15 +107,16 @@ class RegistMoreInfo extends React.Component {
 
   async _renderImagePicker(){
     if(Platform.OS==='ios'){
-    await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      await Permissions.askAsync(Permissions.CAMERA_ROLL);
     }
 
     ImagePicker.launchImageLibraryAsync({
         mediaTypes:'Images',
         quality:0.1
     }).then(image=>{
-      this.setState({showImageGrabModal:false, loadingAvatar:true})
+        this.setState({showImageGrabModal:false})
         if (!image.cancelled) {
+          this.setState({loadingAvatar:true})
             DataUtil.uploadPhoto(image.uri, this.props.account.uid).then(photoURL=>{
               this.setState({ photoURL, loadingAvatar:false});
             }).catch(()=>{
@@ -137,8 +138,9 @@ class RegistMoreInfo extends React.Component {
         allowsEditing:true,
         quality:0.1,
     }).then(image=>{
-      this.setState({showImageGrabModal:false, loadingAvatar:true})
+        this.setState({showImageGrabModal:false})
         if (!image.cancelled) {
+          this.setState({loadingAvatar:true})
           DataUtil.uploadPhoto(image.uri, this.props.account.uid).then(photoURL=>{
             this.setState({ photoURL, loadingAvatar:false});
           }).catch(()=>{
@@ -153,6 +155,12 @@ class RegistMoreInfo extends React.Component {
   }
 
   _nextOnPress(){
+    if(this.state.loadingAvatar){
+      alert('Please wait for loading avatar!')
+      return;
+    }
+
+    this.setState({loading:true})
     if(!DataUtil.check_phone_format(this.state.mobile)){
       Toast.sad("The mobile format is not right!");
       return;
@@ -183,10 +191,10 @@ class RegistMoreInfo extends React.Component {
     }
 
     var address = {
-      addressType:ADDRESS_TYPE.userHome,
-      address:'4580 Dufferin Street',
-      latitude: 78.84573,
-      longitude: -144.347567,
+      addressType:ADDRESS_TYPE.pickupAddress,
+      address:this.state.address,
+      latitude: this.props.location.coords.latitude!==undefined?this.props.location.coords.latitude:78.84573,
+      longitude: this.props.location.coords.longitude!==undefined?this.props.location.coords.longitude:-144.347567,
     }
 
     addressList = [];
@@ -206,22 +214,15 @@ class RegistMoreInfo extends React.Component {
       console.log(JSON.stringify(res));
     }).catch(e=>{
       console.log(JSON.stringify(e))
-    })
-    
+    })    
   }
 
-  handleAddressInput = async address => {
-    //this.setState({ showModalDropdown: true, address });
-    try {
-      if (address.length > 2) {
-        const addressSuggestions = await DataUtil.getAutocompleteResult(address);
-        //this.setState({ addressSuggestions });
-        console.log(JSON.stringify(addressSuggestions));
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  _addressSetting(){
+    Actions.push('addressinputview',{
+      _getAddress: (address)=>{this.setState({address})},
+      address:this.state.address
+  });
+  }
 
   render() {
     if(this.state.loading){
@@ -296,12 +297,38 @@ class RegistMoreInfo extends React.Component {
             }}
             keyboardType='numeric'
             />
-            <Hoshi
-            label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.address}
-            borderColor={'#b76c94'}
-            onChangeText={this.handleAddressInput}
-            keyboardType='numeric'
-            />
+            {
+              Platform.OS==='android'?
+              <TouchableOpacity onPress={()=>{this._addressSetting()}}>
+              <Hoshi
+              label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.address}
+              borderColor={'#b76c94'}
+              value={this.state.address}
+              editable={false}
+              multiline={true}
+              />
+              </TouchableOpacity>:
+              <Hoshi
+              label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.address}
+              borderColor={'#b76c94'}
+              onFocus={()=>{this._addressSetting(); this.addressInput.blur();}}
+              editable={true}
+              value={this.state.address}
+              ref={addressInput =>this.addressInput = addressInput}
+              />
+            }
+
+
+            <View>
+            {/*
+              this.state.address?
+              <Text>Pickup location</Text>
+              :
+              <TouchableOpacity style={{justifyContent:'center', alignItems:'center', borderWidth:1, padding:10, marginTop:10}}>
+                <Text style={{color:'#333'}}>Set up pickup location</Text>
+              </TouchableOpacity>
+            */}
+            </View>
             <CheckBox
               center
               title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.includeBusinessFeature}
@@ -338,7 +365,7 @@ class RegistMoreInfo extends React.Component {
           <Modal isVisible={this.state.showImageGrabModal} style={{justifyContent:'center', alignItems:'center'}} onBackdropPress={()=>this.setState({showImageGrabModal:false})}>
           <View style={{backgroundColor:'#fff',paddingTop:10, paddingBottom:10, width:width*0.8, borderRadius:10}}>
             <View style={{padding:10, borderBottomColor:'#ddd', borderBottomWidth:1}}>
-                <View><Text style={{fontSize:23, marginLeft:20}}>{'Choose a photo from:'}</Text></View>
+                <View><Text style={{fontSize:23, marginLeft:20}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.choosePhotoFrom+':'}</Text></View>
             </View>
             <TouchableOpacity style={{
                 justifyContent:'center', 
@@ -372,6 +399,7 @@ class RegistMoreInfo extends React.Component {
 function mapStateToProps(store){
   return{
     account: store.userStore.account,
+    location: store.userStore.location,
   }
 }
 

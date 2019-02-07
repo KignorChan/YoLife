@@ -26,6 +26,11 @@ const HEADER_HEIGHT = height*0.18;
 const AVATAR_SIZE = HEADER_HEIGHT*0.5;
 
 class MyCenter extends React.Component {
+    static defaultProps = {
+        user:{
+            email:''
+        }
+    }
 
     componentDidMount(){
     }

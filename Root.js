@@ -25,6 +25,8 @@ import AddBusinesses from './screens/AddBusinesses';
 import Feedback from './screens/Feedback';
 import RegistMoreInfo from './screens/RegistMoreInfo';
 import AddressInputView from './screens/AddressInputView';
+import SignupSuccessScreen from './screens/SignupSuccessScreen';
+import EmailVerification from './screens/EmailVerification';
 
 
 
@@ -47,11 +49,12 @@ class Root extends React.Component {
       errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
       });
     } else {
-      setInterval(()=>
-      {
-        this._getLocationAsync()
-      } 
-      ,30000);
+      // setInterval(()=>
+      // {
+      //   this._getLocationAsync()
+      // } 
+      // ,30000);
+      this._getLocationAsync()
     }
   }
 
@@ -72,48 +75,49 @@ class Root extends React.Component {
   _renderScenes(){
     return (
       <Scene key="root" hideNavBar>
-        <Tabs tabBarStyle={{height:TABBAR_HEIGHT}} swipeEnabled={true} >
-          <Scene 
-            key="home" 
-             
-            component={Home} 
-            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.home}
-            icon={({focused})=>{
-              if(focused){
-                return(<MaterialCommunityIcons name='home' size={30} />)
-              }else{
-                return (<MaterialCommunityIcons name='home-outline' size={30} />)
-              }
-            }} 
-            
-            hideNavBar/>
-      
-          <Scene 
-            key="orderHistory" 
-            component={OrderHistory} 
-            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.myOrder}
-            icon={({focused})=>{
-              if(focused){
-                return(<Ionicons name='ios-list-box' size={30} />)
-              }else{
-                return (<Ionicons name='ios-list' size={30} />)
-              }
-            }} 
-            hideNavBar/>
-      
-          <Scene 
-            key="myCenter" 
-            component={MyCenter} 
-            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.me}
-            icon={({focused})=>{
-              if(focused){
-                return(<MaterialIcons name='person' size={30} />)
-              }else{
-                return (<MaterialIcons name='person-outline' size={30} />)
-              }
-            }} 
-            hideNavBar/>
-        </Tabs>
+        <Scene key="tabs" hideNavBar initial>
+          <Tabs tabBarStyle={{height:TABBAR_HEIGHT}} swipeEnabled={true} >
+            <Scene 
+              key="home" 
+              component={Home} 
+              title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.home}
+              icon={({focused})=>{
+                if(focused){
+                  return(<MaterialCommunityIcons name='home' size={30} />)
+                }else{
+                  return (<MaterialCommunityIcons name='home-outline' size={30} />)
+                }
+              }} 
+              
+              hideNavBar/>
+        
+            <Scene 
+              key="orderHistory" 
+              component={OrderHistory} 
+              title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.myOrder}
+              icon={({focused})=>{
+                if(focused){
+                  return(<Ionicons name='ios-list-box' size={30} />)
+                }else{
+                  return (<Ionicons name='ios-list' size={30} />)
+                }
+              }} 
+              hideNavBar/>
+        
+            <Scene 
+              key="myCenter" 
+              component={MyCenter} 
+              title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.me}
+              icon={({focused})=>{
+                if(focused){
+                  return(<MaterialIcons name='person' size={30} />)
+                }else{
+                  return (<MaterialIcons name='person-outline' size={30} />)
+                }
+              }} 
+              hideNavBar/>
+          </Tabs>
+        </Scene>
 
       
         <Scene 
@@ -174,13 +178,26 @@ class Root extends React.Component {
             key="registmoreinfo"
             component={RegistMoreInfo}
             title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.moreInfo}
-            hideNavBar={false}/>
+            hideNavBar={false}
+            />
 
         <Scene 
             key="addressinputview"
             component={AddressInputView}
             title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.address}
-            hideNavBar={false} initial/>
+            hideNavBar={true} />
+
+        <Scene 
+            key="signupsuccessscreen"
+            component={SignupSuccessScreen}
+            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.welcome}
+            hideNavBar={true} />
+
+        <Scene 
+            key="emailverification"
+            component={EmailVerification}
+            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.emailVerification}
+            hideNavBar={true} />
 
       
       </Scene>

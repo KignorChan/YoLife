@@ -120,9 +120,9 @@ export default class DataUtil{
       
           axios
             .get(
-              `https://maps.googleapis.com/maps/api/geocode/json?${latLonParameter}${apiParameter}${filterParameter}`
+              'https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lon+'&key='+CONSTANT_API.GOOGLE_GEOCODE_API_KEY
             )
-            .then(responseJson => {
+            .then(responseJson => {              
               if (responseJson.status == 'ZERO RESULTS') {
                 reject('Invalid address');
               } else {
@@ -132,10 +132,11 @@ export default class DataUtil{
                     selectedAddress.geometry.viewport.southwest.lat
                 );
                 const lngDelta = latDelta * ASPECT_RATIO;
-                const fullAddress = selectedAddress.formatted_address.substring(
-                  0,
-                  selectedAddress.formatted_address.indexOf(',')
-                );
+                // const fullAddress = selectedAddress.formatted_address.substring(
+                //   0,
+                //   selectedAddress.formatted_address.indexOf(',')
+                // );
+                const fullAddress = selectedAddress.formatted_address;
                 const additionalAddressInfo = selectedAddress.formatted_address.substring(
                   selectedAddress.formatted_address.indexOf(',') + 1
                 );
@@ -153,7 +154,7 @@ export default class DataUtil{
               }
             })
             .catch(e => {
-              console.log("error"+JSON.stringify(e));
+              console.log("errorAAA"+JSON.stringify(e));
       
               reject(e);
             });

@@ -23,14 +23,14 @@ export default SettingHeader = ({photoUrl, firstName, lastName}) => {
             alignItems:'center',
         }}>
         {
-            photoUrl?
-            <Image source={{uri:photoUrl}} style={{
+            !photoUrl||photoUrl===undefined?
+            <Image source={DEFAULT_IMAGE_SOURCE} style={{
                 height:AVATAR_SIZE, 
                 width:AVATAR_SIZE, 
                 borderRadius: AVATAR_SIZE/2,
                 marginBottom:10
             }}/>:
-            <Image source={DEFAULT_IMAGE_SOURCE} style={{
+            <Image source={{uri:photoUrl}} style={{
                 height:AVATAR_SIZE, 
                 width:AVATAR_SIZE, 
                 borderRadius: AVATAR_SIZE/2,

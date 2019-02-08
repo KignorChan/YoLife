@@ -185,7 +185,6 @@ class Home extends React.Component {
                     >
 
 
-
                     </ScrollView>
                 </Animated.View>
             </View>

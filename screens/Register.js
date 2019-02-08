@@ -34,6 +34,7 @@ import {Toast} from 'teaset';
 import { parsePhoneNumberFromString } from 'libphonenumber-js/max';
 import { connect } from 'react-redux';
 import { saveAccount } from '../redux/actions/user';
+import Firebase from '../backend/Firebase';
 
 
 class Register extends React.Component {
@@ -108,62 +109,44 @@ class Register extends React.Component {
           }
       }
 
-      firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(account=>{
-        console.log('TIMESTAMP: '+ Date.parse(account.user.metadata.lastSignInTime))
-        var user = {
-          uid: account.user.uid,
-          email:account.user.email,
-          phoneNumber:account.user.phoneNumber,
-          lastLoginAt:Date.parse(account.user.metadata.lastSignInTime),
-          createdAt: Date.parse(account.user.metadata.creationTime),
-          photoURL:account.user.photoURL,
-        }
-        this.props.saveAccount(user);
-        this.setState({loading:false});
-        Actions.push('emailverification');
+      Firebase.createUserWithEmailAndPassword(this.state.email, this.state.password).then(account=>{
+          console.log('TIMESTAMP: '+ Date.parse(account.user.metadata.lastSignInTime))
+          var user = {
+            uid: account.user.uid,
+            email:account.user.email,
+            phoneNumber:account.user.phoneNumber,
+            lastLoginAt:Date.parse(account.user.metadata.lastSignInTime),
+            createdAt: Date.parse(account.user.metadata.creationTime),
+            photoURL:account.user.photoURL,
+          }
+          this.props.saveAccount(user);
+          this.setState({loading:false});
+          Actions.push('emailverification');
       }).catch(e=>{
-        console.log(JSON.stringify(e))
-        alert('Something error!')
-        this.setState({loading:false});
+          console.log(JSON.stringify(e))
+          alert('Something error!')
+          this.setState({loading:false});
       })
 
 
-
-
-      
-    //   FireBase.signup(this.state.username, this.state.password)
-    //     .then(result => {
-    //       FireBase.updateUserType(result.uid, this.state.dropdownText);
-    //       //if(result.emailVerified){
-    //         FireBase.login(false, {
-    //           email: this.state.username,
-    //           password: this.state.password,
-    //         })
-    //           .then(r1 => {
-    //             FireBase.getDatabase().ref('users/'+result.uid).on('value',snapshot=>{
-    //               var user = snapshot.val();
-    //               Authentication.saveItem('userId', result.uid);
-    //               Authentication.saveItem('userEmail', this.state.username);
-    //               FireBase.currentUser.userType = user.userType;
-    //             });
-  
-    //             Actions.push('mainPage');
-    //           })
-    //           .catch(e => {
-    //             console.log(e.message);
-    //             this.setState({ message: e.message, loading: false });
-    //           });
-    //       // }else{
-    //       //   Actions.push('emailVerification',{from:'registerView'})
-    //       // }
-          
-    //     })
-    //     .catch(error => {
-    //       // Handle Errors here.
-    //       const errorCode = error.code;
-    //       const errorMessage = error.message;
-    //       this.setState({ message: error.message, loading: false });
-    //     });
+      // firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(account=>{
+      //   console.log('TIMESTAMP: '+ Date.parse(account.user.metadata.lastSignInTime))
+      //   var user = {
+      //     uid: account.user.uid,
+      //     email:account.user.email,
+      //     phoneNumber:account.user.phoneNumber,
+      //     lastLoginAt:Date.parse(account.user.metadata.lastSignInTime),
+      //     createdAt: Date.parse(account.user.metadata.creationTime),
+      //     photoURL:account.user.photoURL,
+      //   }
+      //   this.props.saveAccount(user);
+      //   this.setState({loading:false});
+      //   Actions.push('emailverification');
+      // }).catch(e=>{
+      //   console.log(JSON.stringify(e))
+      //   alert('Something error!')
+      //   this.setState({loading:false});
+      // })
     }
   };
 

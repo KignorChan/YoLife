@@ -112,7 +112,7 @@ class RegistMoreInfo extends React.Component {
 
     ImagePicker.launchImageLibraryAsync({
         mediaTypes:'Images',
-        quality:0.1
+        quality:0.01
     }).then(image=>{
         this.setState({showImageGrabModal:false})
         if (!image.cancelled) {
@@ -212,6 +212,8 @@ class RegistMoreInfo extends React.Component {
 
     axios.post(CONSTANT_API.addUsers, account).then(res=>{
       console.log(JSON.stringify(res));
+      Actions.reset('tabs');
+      this.setState({loading:false})
     }).catch(e=>{
       console.log(JSON.stringify(e))
     })    

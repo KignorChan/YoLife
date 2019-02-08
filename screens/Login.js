@@ -19,12 +19,16 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Makiko } from 'react-native-textinput-effects';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import { Font, AppLoading } from "expo";
+import Axios from 'axios';
 import {Toast} from 'teaset';
 import { logIn, skipLogin } from '../redux/actions/user';
-import firebase from 'firebase';
+//import firebase from 'firebase';
 import commonStyle from '../styles/common';
 import loginStyle from '../styles/login';
 import { Actions } from 'react-native-router-flux';
+import Firebase from '../backend/Firebase';
+import * as TYPES from '../redux/actions/types';
+import { CONSTANT_API } from '../constants/Constants';
 
 
 import DeviceSetting from '../utils/DeviceSetting';
@@ -35,11 +39,12 @@ class LoginPage extends Component{
     constructor(props){
         super(props);
         this.state = {
-            username: '',
+            email: '',
             password: '',
             btnFlag: true,
             modalVisible: false,
             loading: true,
+            isLoggedIn:null,
         };
         this.onChangeName = this.onChangeName.bind(this);
         this.onChangePswd = this.onChangePswd.bind(this);
@@ -62,8 +67,8 @@ class LoginPage extends Component{
       }
 
     handleLogin(){
-        const { username, password } = this.state;
-        if (!username) {
+        const { email, password } = this.state;
+        if (!email) {
             Toast.sad(DeviceSetting.setting.APP_LANGUAGE_PACKAGE.pleaseEnterYourEmail);
             return;
         }
@@ -72,22 +77,43 @@ class LoginPage extends Component{
             return;
         }
         this.setState({loading:true});
-        firebase.auth().signInWithEmailAndPassword(username, password).then(result=>{
-            console.log('RESULT: '+JSON.stringify(result));
+
+        Firebase.signinWithEmailAndPassword(email, password).then(result=>{
+            //console.log('RESULT: '+JSON.stringify(result.user.uid));
             if(result){
                 if(result.user.emailVerified){
-                    Actions.pop();
-                    this.setState({loading:false});
+                    Axios.post(CONSTANT_API.getUserById, {'id':result.user.uid}).then(result=>{
+                        if( result && result.data.totel!==0 ){
+                            var user = result.data.rows[0];
+                            this.props.login(user);
+                        }
+                        Actions.pop();
+                        this.setState({loading:false});
+                    })      
                 }else{
                     Actions.push('emailverification');
                     this.setState({loading:false});
-                }
+                }    
             }
         }).catch(e=>{
             console.error(e);
-        });
+        })
+        // firebase.auth().signInWithEmailAndPassword(email, password).then(result=>{
+        //     console.log('RESULT: '+JSON.stringify(result));
+        //     if(result){
+        //         if(result.user.emailVerified){
+        //             Actions.pop();
+        //             this.setState({loading:false});
+        //         }else{
+        //             Actions.push('emailverification');
+        //             this.setState({loading:false});
+        //         }
+        //     }
+        // }).catch(e=>{
+        //     console.error(e);
+        // });
         // let opt = {
-        //     'name': this.state.username,
+        //     'name': this.state.email,
         //     'password': this.state.password,
         // };
         // this.setState({
@@ -95,6 +121,7 @@ class LoginPage extends Component{
         // })
         //this.props.dispatch(logIn(opt));
         //Actions.pop();
+        
     }
 
     handleRegister(){
@@ -104,7 +131,7 @@ class LoginPage extends Component{
     }
 
     onChangeName(text){
-        this.setState({'username': text});
+        this.setState({'email': text});
     }
 
     onChangePswd(text){
@@ -113,7 +140,7 @@ class LoginPage extends Component{
 
 
     render(){
-        const { username, password, modalVisible } = this.state;
+        const { email, password, modalVisible } = this.state;
 
         if(this.state.loading){
             return (
@@ -142,7 +169,7 @@ class LoginPage extends Component{
                                 placeholder={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.email}
                                 style={loginStyle.loginInput} 
                                 onChangeText={this.onChangeName}
-                                value={username}
+                                value={email}
                                 keyboardType='email-address'
                             />
                         </View>
@@ -194,7 +221,15 @@ function mapState2Props(store){
     }
 }
 
+function mapDispatchToProps(dispatch){
+    return{
+        login(user){
+            dispatch({'type':TYPES.LOGGED_IN, user:user});
+        }
+    }
+}
 
-export default connect(mapState2Props)(LoginPage);
+
+export default connect(mapState2Props, mapDispatchToProps)(LoginPage);
 
 

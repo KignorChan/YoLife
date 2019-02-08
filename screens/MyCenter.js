@@ -51,10 +51,19 @@ class MyCenter extends React.Component {
         return(
             <SafeAreaView style={container}>
                 <View style={header}>
+                {
+                    this.props.isLoggedIn?
+                    <TouchableOpacity onPress={()=>Actions.push('profile')} style={styles.left}>
+                        <Image source={{uri:this.props.user.photoUrl}} style={avatar}/>
+                        <Text style={headerUsername}>{this.props.user.email}</Text>
+                    </TouchableOpacity>:
                     <TouchableOpacity onPress={()=>this._goLoginPage()} style={styles.left}>
                         <Image source={require('../assets/images/qq.jpg')} style={avatar}/>
-                        <Text style={headerUsername}>{this.props.isLoggedIn ? this.props.user.email :  DeviceSetting.setting.APP_LANGUAGE_PACKAGE.loginText}</Text>
+                        <Text style={headerUsername}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.loginText}</Text>
                     </TouchableOpacity> 
+                }
+
+                    
                 </View>
                 
                 <ScrollView style={buttonSection}>

@@ -14,10 +14,11 @@ import {
     ActivityIndicator
  } from 'react-native';
 //import FireBase from '../backend/Firebase';
-import firebase from 'firebase';
+//import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import {Toast} from 'teaset';
 import DeviceSetting from '../utils/DeviceSetting';
+import FireBase from '../backend/Firebase';
 
 const { width, height } = Dimensions.get('window');
 
@@ -40,20 +41,36 @@ class EmailVerification extends React.Component{
 
     componentDidMount(){
         this.setState({refreshing:false})
-        firebase.auth().currentUser.reload().then(()=>{
-            firebase.auth().onAuthStateChanged(user=>{
-                //console.log('USERRR:'+JSON.stringify(user));
-                if(user){
-                    this.setState({
-                        emailVerified:user.emailVerified,
-                    })
-                    if(!user.emailVerified){
-                        this._sendEmailVerification();
-                    }
+
+        FireBase.onAuthStateChanged().then(user=>{
+            //console.log('USERRR:'+JSON.stringify(user));
+            if(user){
+                this.setState({
+                    emailVerified:user.emailVerified,
+                })
+                if(!user.emailVerified){
+                    this._sendEmailVerification();
                 }
-                this.setState({loading:false});
-            })
-        });
+            }
+            this.setState({loading:false});
+        }).catch(e=>{
+            console.error(e);
+        })
+
+        // firebase.auth().currentUser.reload().then(()=>{
+        //     firebase.auth().onAuthStateChanged(user=>{
+        //         //console.log('USERRR:'+JSON.stringify(user));
+        //         if(user){
+        //             this.setState({
+        //                 emailVerified:user.emailVerified,
+        //             })
+        //             if(!user.emailVerified){
+        //                 this._sendEmailVerification();
+        //             }
+        //         }
+        //         this.setState({loading:false});
+        //     })
+        // });
         
         this.countDown();
     }
@@ -75,11 +92,16 @@ class EmailVerification extends React.Component{
     }
 
     _sendEmailVerification(){
-        firebase.auth().currentUser.sendEmailVerification().then(()=>{
+        FireBase.sendEmailVerification().then(result=>{
             this.setState({expireSeconds:60})
-        }).catch(err=>{
-            console.log('USERRRR'+JSON.stringify(err));
+        }).catch(e=>{
+            console.error(e);
         })
+        // firebase.auth().currentUser.sendEmailVerification().then(()=>{
+        //     this.setState({expireSeconds:60})
+        // }).catch(err=>{
+        //     console.log('USERRRR'+JSON.stringify(err));
+        // })
 
     }
 
@@ -130,30 +152,49 @@ class EmailVerification extends React.Component{
     _logoutAndGoToMain(){
         //this.setState({refreshing:true, loading:true});
         this.setState({loading:true});
-        firebase.auth().signOut().then(()=>{
+        FireBase.signOut().then((result)=>{
             Actions.reset('tabs');
             this.setState({loading:false});
         })
+        // firebase.auth().signOut().then(()=>{
+        //     Actions.reset('tabs');
+        //     this.setState({loading:false});
+        // })
         
     }
 
     _refreshComponent(){
         this.setState({loading:true})
-        firebase.auth().currentUser.reload().then(()=>{
-            firebase.auth().onAuthStateChanged(user=>{
-                //console.log('USERRR:'+JSON.stringify(user));
-                if(user){
-                    this.setState({
-                        emailVerified:user.emailVerified,
-                    })
-                    if(!user.emailVerified){
-                        this._sendEmailVerification();
-                        Toast.sad(DeviceSetting.setting.APP_LANGUAGE_PACKAGE.emailVerifyFailMessage);
-                    }
+        FireBase.onAuthStateChanged().then(user=>{
+            //console.log('USERRR:'+JSON.stringify(user));
+            if(user){
+                this.setState({
+                    emailVerified:user.emailVerified,
+                })
+                if(!user.emailVerified){
+                    this._sendEmailVerification();
+                    Toast.sad(DeviceSetting.setting.APP_LANGUAGE_PACKAGE.emailVerifyFailMessage);
                 }
-                this.setState({loading:false});
-            })
-        });
+            }
+            this.setState({loading:false});
+        }).catch(e=>{
+            console.error(e);
+        })
+        // firebase.auth().currentUser.reload().then(()=>{
+        //     firebase.auth().onAuthStateChanged(user=>{
+        //         //console.log('USERRR:'+JSON.stringify(user));
+        //         if(user){
+        //             this.setState({
+        //                 emailVerified:user.emailVerified,
+        //             })
+        //             if(!user.emailVerified){
+        //                 this._sendEmailVerification();
+        //                 Toast.sad(DeviceSetting.setting.APP_LANGUAGE_PACKAGE.emailVerifyFailMessage);
+        //             }
+        //         }
+        //         this.setState({loading:false});
+        //     })
+        // });
     }
 
     render(){

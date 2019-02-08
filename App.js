@@ -3,7 +3,8 @@ import { View, ActivityIndicator } from 'react-native';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
-import * as firebase from 'firebase';
+//import * as firebase from 'firebase';
+import Firebase from './backend/Firebase';
 
 import Root from './Root';
 import DeviceSetting from './utils/DeviceSetting';
@@ -26,15 +27,16 @@ class App extends React.Component {
 
   componentWillMount(){
       // Initialize Firebase
-      var config = {
-        apiKey: "AIzaSyCqzojrW7szmLKgaITTKSqTG9NFejMRMyU",
-        authDomain: "yolife-541a7.firebaseapp.com",
-        databaseURL: "https://yolife-541a7.firebaseio.com",
-        projectId: "yolife-541a7",
-        storageBucket: "yolife-541a7.appspot.com",
-        messagingSenderId: "972980896041"
-      };
-      firebase.initializeApp(config);
+      // var config = {
+      //   apiKey: "AIzaSyCqzojrW7szmLKgaITTKSqTG9NFejMRMyU",
+      //   authDomain: "yolife-541a7.firebaseapp.com",
+      //   databaseURL: "https://yolife-541a7.firebaseio.com",
+      //   projectId: "yolife-541a7",
+      //   storageBucket: "yolife-541a7.appspot.com",
+      //   messagingSenderId: "972980896041"
+      // };
+      // firebase.initializeApp(config);
+      Firebase.initialize();
   }
 
   componentDidMount(){
@@ -43,8 +45,6 @@ class App extends React.Component {
         this.setState({prepareLanguageComplete:true});
       }
     })
-
-    //console.log(JSON.stringify(store))
   }
 
   render() {

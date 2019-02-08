@@ -2,6 +2,8 @@
 
 import { AlertIOS } from 'react-native';
 import * as TYPES from './types';
+import firebase from 'firebase';
+import { resume } from 'expo/build/Speech/Speech';
 
 // fake user data
 let testUser = {
@@ -47,7 +49,6 @@ export function logIn(opt){
 			});
 	}
 }
-
 
 
 // skip login

@@ -81,6 +81,8 @@ class LoginPage extends Component{
         Firebase.signinWithEmailAndPassword(email, password).then(result=>{
             //console.log('RESULT: '+JSON.stringify(result.user.uid));
             if(result){
+                //this.props.saveAccount(result.user);
+                console.log('LOGIN:'+JSON.stringify(result.user))
                 if(result.user.emailVerified){
                     Axios.post(CONSTANT_API.getUserById, {'id':result.user.uid}).then(result=>{
                         if( result && result.data.totel!==0 ){
@@ -225,6 +227,9 @@ function mapDispatchToProps(dispatch){
     return{
         login(user){
             dispatch({'type':TYPES.LOGGED_IN, user:user});
+        },
+        saveAccount(account){
+            dispatch({'type':TYPES.SAVE_ACCOUNT,account: account});
         }
     }
 }

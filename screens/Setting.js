@@ -14,6 +14,14 @@ const HEADER_HEIGHT = height*0.18;
 const AVATAR_SIZE = HEADER_HEIGHT*0.5;
 
 class Setting extends React.Component{
+    constructor(props){
+        super(props);
+
+        this.state={
+
+        }
+    }
+
     render(){
         const { 
             container, 
@@ -25,7 +33,7 @@ class Setting extends React.Component{
 
         return(
             <SafeAreaView style={container}>
-                <SettingHeader/>
+                <SettingHeader photoUrl={this.props.user.photoUrl} firstName={this.props.user.firstName} lastName={this.props.user.lastName}/>
                 <ScrollView style={buttonSection}>
                     <TouchableOpacity style={[styles.buttonContainer,{marginTop:20}]} onPress={()=>{Actions.push('languagessetting')}}>
                         <EntypoIcon 

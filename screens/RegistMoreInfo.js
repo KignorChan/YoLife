@@ -40,7 +40,7 @@ import { resolve } from 'uri-js';
 import { reject } from 'rsvp';
 import FileUploader from "react-firebase-file-uploader";
 import { connect } from 'react-redux';
-import { saveAccount } from '../redux/actions/user';
+import { saveAccount, saveUser, firstLogin } from '../redux/actions/user';
 import axios from 'axios';
 import Qs from 'qs';
 
@@ -202,7 +202,7 @@ class RegistMoreInfo extends React.Component {
 
     account.addressList = addressList;
 
-    console.log(JSON.stringify(account));
+    //console.log(JSON.stringify(account));
 
     // var account = {
     //   account:'hello world'
@@ -211,7 +211,12 @@ class RegistMoreInfo extends React.Component {
     //account = JSON.stringify(account)
 
     axios.post(CONSTANT_API.addUsers, account).then(res=>{
-      console.log(JSON.stringify(res));
+      console.log('AAAABBB'+JSON.stringify(res));
+      if(res.status===200){
+        if(res.data.success===true){
+          this.props.saveUser(account);
+        }
+      }
       Actions.reset('tabs');
       this.setState({loading:false})
     }).catch(e=>{
@@ -405,10 +410,13 @@ function mapStateToProps(store){
   }
 }
 
-function mapDispatchToProps(){
+function mapDispatchToProps(dispatch){
    return {
-    saveAccount(dispatch){
+    saveAccount(account){
         dispatch(saveAccount(account));
+    },
+    saveUser(user){
+      dispatch(firstLogin(user));
     }
    }
 }

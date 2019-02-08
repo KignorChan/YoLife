@@ -45,11 +45,19 @@ export default function user(state=initialState, action){
 			return {
 				...state,
 				account:action.account,
+				status: 'done'
 			};
 		case TYPES.SAVE_LOCATION:
 			return {
 				...state,
 				location:action.location,
+				status: 'done'
+			};
+		case TYPES.SAVE_USER:
+			return {
+				...state,
+				user:action.user,
+				status: 'done'
 			};
 
 		default: 

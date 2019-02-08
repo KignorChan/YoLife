@@ -68,11 +68,19 @@ export function logOut(){
 }
 
 
-//SAVE ACCOUNT 
+//SAVE ACCOUNT: save user's firebase account info to 'account
 export function saveAccount(account){
 	return {
 		'type': TYPES.SAVE_ACCOUNT,
 		'account':account,
+	}
+}
+
+//SAVE USER 
+export function saveUser(user){
+	return {
+		'type': TYPES.SAVE_USER,
+		'user':user,
 	}
 }
 
@@ -82,3 +90,12 @@ export function saveLocation(location){
 		'location':location,
 	}
 }
+
+//after regist more info, the info from firebase account will save to 'user'
+export function firstLogin(user){
+	return {
+		'type': TYPES.LOGGED_IN,
+		'user': user
+	}
+}
+

@@ -24,6 +24,8 @@ import { logOut } from '../redux/actions/user';
 const { width, height } = Dimensions.get('window');
 const HEADER_HEIGHT = height*0.18;
 const AVATAR_SIZE = HEADER_HEIGHT*0.5;
+const DEFAULT_IMAGE_SOURCE = require('../assets/images/qq.jpg');
+
 
 class MyCenter extends React.Component {
     static defaultProps = {
@@ -54,7 +56,12 @@ class MyCenter extends React.Component {
                 {
                     this.props.isLoggedIn?
                     <TouchableOpacity onPress={()=>Actions.push('profile')} style={styles.left}>
-                        <Image source={{uri:this.props.user.photoUrl}} style={avatar}/>
+                    {
+                        this.props.user.photoUrl?
+                        <Image source={{uri:this.props.user.photoUrl}} style={avatar}/>:
+                        <Image source={DEFAULT_IMAGE_SOURCE} style={avatar}/>
+                    }
+                        
                         <Text style={headerUsername}>{this.props.user.email}</Text>
                     </TouchableOpacity>:
                     <TouchableOpacity onPress={()=>this._goLoginPage()} style={styles.left}>

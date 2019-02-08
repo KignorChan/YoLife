@@ -11,9 +11,10 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const HEADER_HEIGHT = height*0.3;
 const AVATAR_SIZE = HEADER_HEIGHT*0.5;
-const DEFAULT_IMAGE_SOURCE = 'https://firebasestorage.googleapis.com/v0/b/pickupper-47f2b.appspot.com/o/images%2FMcDonald%2F1547679255517%2F1548365479365.jpg?alt=media&token=053e4a9a-7cd4-48ba-808f-8cf5be91787a';
+const DEFAULT_IMAGE_SOURCE = require('../../assets/images/qq.jpg');
 
-export default SettingHeader = () => {
+export default SettingHeader = ({photoUrl, firstName, lastName}) => {
+
     return(
         <View style={{
             backgroundColor:'#fff', 
@@ -21,12 +22,22 @@ export default SettingHeader = () => {
             justifyContent:'center', 
             alignItems:'center',
         }}>
-            <Image source={{uri:DEFAULT_IMAGE_SOURCE}} style={{
+        {
+            photoUrl?
+            <Image source={{uri:photoUrl}} style={{
+                height:AVATAR_SIZE, 
+                width:AVATAR_SIZE, 
+                borderRadius: AVATAR_SIZE/2,
+                marginBottom:10
+            }}/>:
+            <Image source={DEFAULT_IMAGE_SOURCE} style={{
                 height:AVATAR_SIZE, 
                 width:AVATAR_SIZE, 
                 borderRadius: AVATAR_SIZE/2,
                 marginBottom:10
             }}/>
+        }
+
             <Text style={{fontSize:25, fontWeight:'bold'}}>User Name</Text>
             <TouchableOpacity style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}} onPress={()=>{Actions.push('profile')}}>
                 <Text style={{fontSize:18, color:'#4286f4'}}>Edit</Text>

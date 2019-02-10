@@ -166,7 +166,7 @@ class Root extends React.Component {
             key="addbusinesses"
             component={AddBusinesses}
             title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.newBusiness}
-            hideNavBar={false}/>
+            hideNavBar={true}/>
 
         <Scene 
             key="feedback"

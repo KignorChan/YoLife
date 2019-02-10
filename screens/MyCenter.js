@@ -20,6 +20,7 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import DeviceSetting from '../utils/DeviceSetting';
 import { logOut } from '../redux/actions/user';
+import Toast from 'teaset/components/Toast/Toast';
 
 const { width, height } = Dimensions.get('window');
 const HEADER_HEIGHT = height*0.18;
@@ -39,6 +40,44 @@ class MyCenter extends React.Component {
 
     _goLoginPage(){
         Actions.push('login');
+    }
+
+    _goLoginPageWithErrorMassage(){
+        Toast.fail('Please login first!')
+        Actions.push('login');
+    }
+
+    _goToFavorites(){
+        if(this.props.isLoggedIn){
+            alert('comming soon')
+        }else{
+            this._goLoginPageWithErrorMassage()
+        }
+    }
+
+    _goToManageStore(){
+        if(this.props.isLoggedIn){
+            alert('comming soon')
+        }else{
+            this._goLoginPageWithErrorMassage()
+        }
+    }
+
+    _goToAddBusiness(){
+        if(this.props.isLoggedIn){
+            Actions.push('addbusinesses')
+        }else{
+            this._goLoginPageWithErrorMassage()
+        }
+    }
+
+    _goToSetting(){
+        if(this.props.isLoggedIn){
+            Actions.push('setting')
+        }else{
+            this._goLoginPageWithErrorMassage()
+        }
+        
     }
     
     render(){
@@ -92,7 +131,7 @@ class MyCenter extends React.Component {
                   
         </TouchableOpacity>*/}
 
-                    <TouchableOpacity style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.buttonContainer} onPress={()=>{this._goToFavorites()}}>
                         <SimpleLineIcons 
                             name={'star'}
                             size={25}
@@ -109,7 +148,7 @@ class MyCenter extends React.Component {
                 
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.buttonContainer} onPress={()=>{this._goToManageStore()}}>
                         <SimpleLineIcons 
                             name={'organization'}
                             size={25}
@@ -126,7 +165,7 @@ class MyCenter extends React.Component {
                 
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buttonContainer} onPress={()=>{Actions.push('addbusinesses')}}>
+                    <TouchableOpacity style={styles.buttonContainer} onPress={()=>{this._goToAddBusiness()}}>
                         <SimpleLineIcons 
                             name={'plus'}
                             size={25}
@@ -160,7 +199,7 @@ class MyCenter extends React.Component {
                 
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buttonContainer} onPress={()=>{Actions.push('setting')}}>
+                    <TouchableOpacity style={styles.buttonContainer} onPress={()=>{this._goToSetting()}}>
                         <SimpleLineIcons 
                             name={'settings'}
                             size={25}

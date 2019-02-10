@@ -220,6 +220,8 @@ class RegistMoreInfo extends React.Component {
       Actions.reset('tabs');
       this.setState({loading:false})
     }).catch(e=>{
+      alert('Internet error')
+      this.setState({loading:false})
       console.log(JSON.stringify(e))
     })    
   }

@@ -13,11 +13,18 @@ import {
     KeyboardAvoidingView, 
     Keyboard, 
     Animated, 
+    Alert
 } from 'react-native';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import Carousel from 'react-native-looped-carousel';
 import Modal from "react-native-modal";
+import { Actions } from 'react-native-router-flux';
+import {Toast} from 'teaset';
+import { Isao,Fumi, Hoshi } from 'react-native-textinput-effects';
+import { connect } from 'react-redux';
+import { CONSTANT_API, ADDRESS_TYPE } from '../constants/Constants';
+
 
 import DeviceSetting from '../utils/DeviceSetting';
 
@@ -41,6 +48,15 @@ class AddBusinesses extends Component{
             showAddCategoryModal:false,
             category:'',
             items:[],
+
+            businessName:'',
+            description:'',
+            ownerName:'',
+            tags:'',
+            telephoneNumber:'',
+            email:'',
+            website:'',
+            address:'',
         }
 
         this.keyboardMove = new Animated.ValueXY();
@@ -68,6 +84,48 @@ class AddBusinesses extends Component{
     _toggleModal(){
         this.setState({showAddCategoryModal:!this.state.showAddCategoryModal, category:''})
         //alert(this.state.showAddCategoryModal)
+    }
+
+    _handleSubmit(){
+        //Toast.success('Success!')
+        if(this.state.businessName===''){
+            alert('Business name can not be empty');
+            return;
+        }
+        if(this.state.address===''){
+            alert('Business address can not be empty');
+            return;
+        }
+
+        var address = {
+            addressType:ADDRESS_TYPE.businessAddress,
+            address:this.state.address,
+            latitude: this.props.location.coords.latitude!==undefined?this.props.location.coords.latitude:0.000,
+            longitude: this.props.location.coords.longitude!==undefined?this.props.location.coords.longitude:0.000,
+        }
+
+        var business = {
+            uid:this.props.account.uid,
+            businessName:this.state.businessName,
+            description:this.state.description,
+            ownerName:this.state.ownerName,
+            tags:this.state.tags,
+            telephoneNumber:this.state.telephoneNumber,
+            email:this.state.email,
+            website:this.state.website,
+            address:address,
+        }
+        console.log('business: '+JSON.stringify(business));
+
+        Alert.alert('Business added', 'Your business has been created!',[{text:'OK', onPress:()=>Actions.pop()}]);
+        
+    }
+
+    _addressSetting(){
+        Actions.push('addressinputview',{
+          _getAddress: (address)=>{this.setState({address})},
+          address:this.state.address
+      });
     }
 
     _renderInformationSection(){
@@ -98,8 +156,13 @@ class AddBusinesses extends Component{
                         paddingBottom:10,
                         marginTop:2,
                     }}>
-                        <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.businessName+': '}</Text>
-                        <TextInput style={{fontSize:20, borderBottomColor:'#000', borderBottomWidth:1}} />
+                        <Hoshi
+                        label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.businessName}
+                        borderColor={'#b76c94'}
+                        onChangeText={(value)=>{
+                          this.setState({ businessName: value })
+                        }}
+                        />
                     </View>
                     <View style={{
                         justifyContent:'space-between', 
@@ -110,8 +173,13 @@ class AddBusinesses extends Component{
                         paddingBottom:10,
                         marginTop:2,
                     }}>
-                        <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.description+': '}</Text>
-                        <TextInput style={{fontSize:20, borderBottomColor:'#000', borderBottomWidth:1}} />
+                        <Hoshi
+                        label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.description}
+                        borderColor={'#b76c94'}
+                        onChangeText={(value)=>{
+                        this.setState({ description: value })
+                        }}
+                        />
                     </View>
                     <View style={{
                         justifyContent:'space-between', 
@@ -122,8 +190,13 @@ class AddBusinesses extends Component{
                         paddingBottom:10,
                         marginTop:2,
                     }}>
-                        <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.ownerName+': '}</Text>
-                        <TextInput style={{fontSize:20, borderBottomColor:'#000', borderBottomWidth:1}} />
+                        <Hoshi
+                        label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.ownerName}
+                        borderColor={'#b76c94'}
+                        onChangeText={(value)=>{
+                        this.setState({ ownerName: value })
+                        }}
+                        />
                     </View>
                     <View style={{
                         justifyContent:'space-between', 
@@ -134,8 +207,13 @@ class AddBusinesses extends Component{
                         paddingBottom:10,
                         marginTop:2,
                     }}>
-                        <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.tags+': '}</Text>
-                        <TextInput style={{fontSize:20, borderBottomColor:'#000', borderBottomWidth:1}} />
+                        <Hoshi
+                        label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.tags}
+                        borderColor={'#b76c94'}
+                        onChangeText={(value)=>{
+                        this.setState({ tags: value })
+                        }}
+                        />
                     </View>
 
                     <View style={{height:50}} />
@@ -149,17 +227,28 @@ class AddBusinesses extends Component{
             buttonStyle,
             buttonTextStyle,
             submitButtonStyle,
-            submitButtonTextStyle
+            submitButtonTextStyle,
+            editButtonStyle
         }=styles;
 
         return(
             <ScrollView style={{flex:1}}>
-            <View style={{flex:1, alignItems:'center'}}>
-                <TouchableOpacity style={buttonStyle} onPress={()=>{this._toggleModal()}}>
-                    <Text style={buttonTextStyle}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.addCategory}</Text>
-                </TouchableOpacity>
-            </View>
-
+                <View style={{
+                    alignItems:'center', 
+                    flexDirection:'row', 
+                    justifyContent:'space-around', 
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                    borderBottomWidth:1,
+                    borderColor: '#ddd'
+                }}>
+                    <TouchableOpacity style={editButtonStyle} onPress={()=>{this._toggleModal()}}>
+                        <Text style={buttonTextStyle}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.addCategory}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={editButtonStyle} onPress={()=>{this._toggleModal()}}>
+                        <Text style={buttonTextStyle}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.edit}</Text>
+                    </TouchableOpacity>
+                </View>
             </ScrollView>
         )
     }
@@ -177,8 +266,14 @@ class AddBusinesses extends Component{
                     paddingBottom:10,
                     marginTop:2,
                 }}>
-                    <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.telephoneNumber+': '}</Text>
-                    <TextInput style={{fontSize:20, borderBottomColor:'#000', borderBottomWidth:1}} />
+                    <Hoshi
+                    label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.telephoneNumber}
+                    borderColor={'#b76c94'}
+                    onChangeText={(value)=>{
+                    this.setState({ telephoneNumber: value })
+                    }}
+                    keyboardType='numeric'
+                    />
                 </View>
                 <View style={{
                     justifyContent:'space-between', 
@@ -189,8 +284,13 @@ class AddBusinesses extends Component{
                     paddingBottom:10,
                     marginTop:2,
                 }}>
-                    <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.email+': '}</Text>
-                    <TextInput style={{fontSize:20, borderBottomColor:'#000', borderBottomWidth:1}} />
+                    <Hoshi
+                    label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.email}
+                    borderColor={'#b76c94'}
+                    onChangeText={(value)=>{
+                    this.setState({ email: value })
+                    }}
+                    />
                 </View>
                 <View style={{
                     justifyContent:'space-between', 
@@ -201,8 +301,13 @@ class AddBusinesses extends Component{
                     paddingBottom:10,
                     marginTop:2,
                 }}>
-                    <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.website+': '}</Text>
-                    <TextInput style={{fontSize:20, borderBottomColor:'#000', borderBottomWidth:1}} />
+                    <Hoshi
+                    label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.website}
+                    borderColor={'#b76c94'}
+                    onChangeText={(value)=>{
+                    this.setState({ website: value })
+                    }}
+                    />
                 </View>
                 <View style={{
                     justifyContent:'space-between', 
@@ -213,8 +318,26 @@ class AddBusinesses extends Component{
                     paddingBottom:10,
                     marginTop:2,
                 }}>
-                    <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.address+': '}</Text>
-                    <TextInput style={{fontSize:20, borderBottomColor:'#000', borderBottomWidth:1}} />
+                {
+                    Platform.OS==='android'?
+                    <TouchableOpacity onPress={()=>{this._addressSetting()}}>
+                    <Hoshi
+                    label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.address}
+                    borderColor={'#b76c94'}
+                    value={this.state.address}
+                    editable={false}
+                    multiline={true}
+                    />
+                    </TouchableOpacity>:
+                    <Hoshi
+                    label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.address}
+                    borderColor={'#b76c94'}
+                    onFocus={()=>{this._addressSetting(); this.addressInput.blur();}}
+                    editable={true}
+                    value={this.state.address}
+                    ref={addressInput =>this.addressInput = addressInput}
+                    />
+                  }
                 </View>
             </ScrollView>
         )
@@ -232,9 +355,24 @@ class AddBusinesses extends Component{
             submitButtonTextStyle
         } = styles;
 
-
         return(
+            <SafeAreaView style={{paddingTop: Platform.OS==='android'?StatusBar.currentHeight:0, backgroundColor:'#fff', flex:1}}>
             <KeyboardAvoidingView style={container} enabled behavior='padding' keyboardVerticalOffset={Platform.OS==='android'?100:0}>
+                <View style={{height:50, flexDirection:'row', alignItems:'center', backgroundColor:'#fff'}}>
+                <View style={{flex:1, paddingLeft:20}}>
+                    <TouchableOpacity onPress={()=>{Actions.pop()}}>
+                        <FeatherIcon name='arrow-left' size={28} />
+                    </TouchableOpacity>
+                </View>
+                <View style={{flex:3, alignItems:'center'}}>
+                    <Text style={{fontSize:18}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.address}</Text>
+                </View>
+                <View style={{flex:1, paddingRight:20, alignItems:'flex-end'}}>
+                    <TouchableOpacity onPress={()=>{this._handleSubmit()}}>
+                        <FeatherIcon name='check-circle' size={28} />
+                    </TouchableOpacity>
+                </View>
+                </View>
                 <ScrollableTabView style={scrollableView}>
                     <View tabLabel={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.information} style={body}>
                         {this._renderInformationSection()}
@@ -247,40 +385,43 @@ class AddBusinesses extends Component{
                     </View>
                 </ScrollableTabView>
 
-                <Modal style={{flex:1}} isVisible={this.state.showAddCategoryModal} onBackdropPress={this._toggleModal}>
+                <Modal style={{flex:1}} isVisible={this.state.showAddCategoryModal} onBackdropPress={()=>this._toggleModal()}>
                     <View style={modalContent}>
-                        <TextInput
-                        style={{
-                            height: 40,
-                            width: '100%',
-                            borderColor: 'gray',
-                            borderBottomWidth: 1,
+                        <Hoshi
+                        label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.categoryName}
+                        borderColor={'#b76c94'}
+                        onChangeText={(value)=>{
+                        this.setState({ category: value })
                         }}
-                        onChangeText={text => this.setState({ category: text })}
                         value={this.state.category}
+                        style={{width:'100%'}}
                         />
                         <View
                         style={{
                             alignItems: 'center',
-                            justifyContent: 'center',
+                            justifyContent: 'space-around',
                             flexDirection: 'row',
                             margin: 10,
+                            alignSelf: 'stretch',
                         }}
                         >
-                        <TouchableOpacity style={buttonStyle} onPress={()=>{this.addCategory}}>
-                            <Text style={buttonTextStyle}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.confirm}</Text>
-                        </TouchableOpacity>
                         <TouchableOpacity
                             style={submitButtonStyle}
                             onPress={()=>{this._toggleModal()}}
                         >
                             <Text style={submitButtonTextStyle}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.cancel}</Text>
                         </TouchableOpacity>
+                        <TouchableOpacity 
+                            style={buttonStyle} onPress={()=>{this.addCategory}}>
+                            <Text style={buttonTextStyle}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.confirm}</Text>
+                        </TouchableOpacity>
+
                         </View>
                     </View>
                 </Modal>
                 
             </KeyboardAvoidingView>
+            </SafeAreaView>
         )
     }
 }
@@ -312,8 +453,7 @@ const styles = {
         backgroundColor: '#fff',
         borderWidth: 2,
         borderRadius: 0,
-        width: 140,
-        marginTop: 10,
+        width: width*0.3,
         marginLeft: 5,
         marginRight: 5,
         justifyContent:'center',
@@ -328,8 +468,7 @@ const styles = {
         backgroundColor: '#000',
         borderWidth: 2,
         borderRadius: 0,
-        width: 120,
-        marginTop: 10,
+        width: width*0.3,
         marginLeft: 5,
         marginRight: 5,
         justifyContent:'center',
@@ -338,7 +477,33 @@ const styles = {
     submitButtonTextStyle: {
         color: '#fff',
         fontSize: 18,
+    },
+    editButtonStyle:
+    {
+        backgroundColor: '#fff',
+        marginLeft: 5,
+        marginRight: 5,
+        justifyContent:'center',
+        alignItems: 'center',
     }
 }
 
-export default AddBusinesses;
+function mapStateToProps(store){
+    return{
+        account: store.userStore.account,
+        location: store.userStore.location,
+    }
+}
+  
+function mapDispatchToProps(dispatch){
+    return {
+        saveAccount(account){
+            dispatch(saveAccount(account));
+        },
+        saveUser(user){
+            dispatch(firstLogin(user));
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddBusinesses);

@@ -71,6 +71,8 @@ export const LANGUAGES = {
         pleaseEnterYourEmail:'请输入您的邮箱！',
         pleaseEnterYourPassword:'请输入您的密码！',
         clickHereToNext:'点击这里进入下一步',
+        edit:'编辑',
+        categoryName:'类别名称'
     },
     ENGLISH:{
         home:'Home',
@@ -144,5 +146,7 @@ export const LANGUAGES = {
         pleaseEnterYourEmail:'Please enter your email!',
         pleaseEnterYourPassword:'Please enter your password!',
         clickHereToNext:'Click here to next',
+        edit:'Edit',
+        categoryName:'Category name'
     }
 }

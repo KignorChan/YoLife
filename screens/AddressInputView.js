@@ -15,6 +15,14 @@ import ModalDropdown from './common/ModalDropdown';
 
 
 class AddressInputView extends Component {
+    static defaultProps = {
+        location:{
+            coords:{
+                latitude: 0.000,
+                longitude: 0.000
+            }
+        }
+    }
 
     constructor(props){
         super(props);
@@ -26,18 +34,20 @@ class AddressInputView extends Component {
             addressSugessts:[],
             address:this.props.address,
             currentAddress:'',
+            currentAddressError:'',
         }
     }
 
     componentDidMount(){
         //console.log('AAAA'+JSON.stringify(this.props.location));
 
-        if(this.props.location!==undefined){
+        if(this.props.location.coords!==undefined){
             DataUtil.getAddressFromCoord(this.props.location.coords.latitude,this.props.location.coords.longitude).then(result=>{
                 this.setState({currentAddress: result.fullAddress})
             })
+        }else{
+            this.setState({currentAddressError: 'Can not find your location. Please check your GPS is on!'})
         }
-
     }
     
     handleAddressInput = async address => {
@@ -84,6 +94,24 @@ class AddressInputView extends Component {
                     </Text>
                 </View>
             </TouchableOpacity>
+        )
+    }
+
+    renderCurrentLocationError(){
+        return(
+            <View style={{flexDirection:'row', backgroundColor:'#fff', marginTop:10, padding:10}}>
+                <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
+                    <FontAwesomeIcon name={'map-marker'} size={25} style={{color:'#f2a59d'}}/>
+                </View>
+                <View style={{flex:7, justifyContent:'space-around'}}>
+                    <Text style={{fontWeight:'bold', color:'#999'}}>
+                        Current location:
+                    </Text>
+                    <Text style={{fontSize:16, color:'#555'}}>
+                        {this.state.currentAddressError}
+                    </Text>
+                </View>
+            </View>
         )
     }
 
@@ -148,7 +176,8 @@ class AddressInputView extends Component {
               )}
               handlePress={this.handleAddressSelect.bind(this)}
             />
-            :this.renderCurrentLocation()
+            :this.state.currentAddress?
+            this.renderCurrentLocation():this.renderCurrentLocationError()
         }
 
         

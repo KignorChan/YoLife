@@ -9,7 +9,6 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { } from '../redux/actions/user';
 
-import DeviceSetting from '../utils/DeviceSetting';
 import DataUtil from  '../utils/DataUtil';
 import ModalDropdown from './common/ModalDropdown';
 
@@ -126,7 +125,7 @@ class AddressInputView extends Component {
     return (
       <SafeAreaView style={{flex:1, paddingTop: Platform.OS==='android'?StatusBar.currentHeight:0, backgroundColor:'#fff'}}>
         {/*<Hoshi
-        label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.address}
+        label={this.props.language.address}
         borderColor={'#b76c94'}
         onChangeText={this.handleAddressInput}
         />*/}
@@ -137,7 +136,7 @@ class AddressInputView extends Component {
             </TouchableOpacity>
         </View>
         <View style={{flex:3, alignItems:'center'}}>
-            <Text style={{fontSize:18}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.address}</Text>
+            <Text style={{fontSize:18}}>{this.props.language.address}</Text>
         </View>
         <View style={{flex:1, paddingRight:20, alignItems:'flex-end'}}>
             <TouchableOpacity onPress={()=>{this._handleSubmit()}}>
@@ -189,6 +188,7 @@ class AddressInputView extends Component {
   function mapStateToProps(store){
     return {
         location: store.userStore.location,
+        language: store.setting.language,
     }
   }
   

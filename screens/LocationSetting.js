@@ -4,10 +4,7 @@ import EntypoIcon from 'react-native-vector-icons/Entypo';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-
-import DeviceSetting from '../utils/DeviceSetting';
-
+import { connect } from 'react-redux';
 
 var {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -35,7 +32,7 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
       <SafeAreaView style={container}>
             <TouchableOpacity style={cardContainer}>
                 <View style={{flexDirection:'row', justifyContent:'space-between', flex:1, paddingRight:20}}>
-                    <Text style={labelText}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.homeAddress+': '}</Text>
+                    <Text style={labelText}>{this.props.language.homeAddress+': '}</Text>
                     <Text style={addressText}>{'4580 Dufferin street'}</Text>
                 </View>
                 <Icon 
@@ -46,7 +43,7 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
             </TouchableOpacity>
             <TouchableOpacity style={cardContainer}>
                 <View style={{flexDirection:'row', justifyContent:'space-between', flex:1, paddingRight:20}}>
-                    <Text style={labelText}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.workAddress+': '}</Text>
+                    <Text style={labelText}>{this.props.language.workAddress+': '}</Text>
                     <Text style={addressText}>{'4580 Dufferin street'}</Text>
                 </View>
                 <Icon 
@@ -57,7 +54,7 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
             </TouchableOpacity>
             <View style={cardContainer}>
                 <View style={{flexDirection:'row', justifyContent:'space-between', flex:1, paddingRight:20}}>
-                    <Text style={labelText}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.previousAddress+': '}</Text>
+                    <Text style={labelText}>{this.props.language.previousAddress+': '}</Text>
                 </View>
             </View>
 
@@ -74,7 +71,7 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
                 marginTop:2,
                 flexDirection:'row'
             }}>
-                <Text style={{fontWeight:'bold'}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.workAddress+': '}</Text>
+                <Text style={{fontWeight:'bold'}}>{this.props.language.workAddress+': '}</Text>
                 <TextInput style={{}}>{this.state.lastName}</TextInput>
             </View>
             <View style={{
@@ -87,7 +84,7 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
                 marginTop:2,
                 flexDirection:'row'
             }}>
-                <Text style={{fontWeight:'bold'}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.previousAddress+': '}</Text>
+                <Text style={{fontWeight:'bold'}}>{this.props.language.previousAddress+': '}</Text>
         </View>*/}
             <ScrollView>
                 <TouchableOpacity style={{
@@ -132,4 +129,25 @@ const styles = {
     }
 }
 
-export default Profile;
+function mapStateToProps(store){
+    return {
+      language: store.setting.language,
+      isLoggedIn: store.userStore.isLoggedIn
+    }
+  }
+  
+  function mapDispatchToProps(dispatch){
+    return{
+      saveLocation(location){
+        dispatch(saveLocation(location));
+      },
+      languageSetting(language){
+        dispatch(languageSetting(language))
+      },
+      logout(){
+        dispatch(logOut());
+      }
+    }
+  }
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(Profile);

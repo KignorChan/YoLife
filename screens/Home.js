@@ -6,7 +6,6 @@ import { Header, Body, Left, Right } from 'native-base';
 
 import HomeHeader from './components/HomeHeader';
 import ClassificationSection from './components/ClassificationSection';
-import DeviceSetting from '../utils/DeviceSetting';
 
 var {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;

@@ -7,7 +7,6 @@ import { PersistGate } from 'redux-persist/es/integration/react';
 import Firebase from './backend/Firebase';
 
 import Root from './Root';
-import DeviceSetting from './utils/DeviceSetting';
 
 import configureStore from './redux/store/store';
 
@@ -21,7 +20,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      prepareLanguageComplete:false,
+      loading:true,
     }
   }
 
@@ -37,19 +36,12 @@ class App extends React.Component {
       // };
       // firebase.initializeApp(config);
       Firebase.initialize();
-  }
-
-  componentDidMount(){
-    DeviceSetting.setLanguagePackage().then(result=>{
-      if(result==='complete'){
-        this.setState({prepareLanguageComplete:true});
-      }
-    })
+      this.setState({loading:false});
   }
 
   render() {
 
-    if(this.state.prepareLanguageComplete){
+    if(!this.state.loading){
       return (
         <Provider store={store}>
           <PersistGate 

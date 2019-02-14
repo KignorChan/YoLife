@@ -1,6 +1,7 @@
-const DOMAIN = 'http://192.168.0.14:8080/yolife/'
+//const DOMAIN = 'http://192.168.0.14:8080/yolife/'
 //const DOMAIN = 'http://99.254.227.162:8080/yolife/'
 //const DOMAIN = 'http:192.168.0.111:8080/yolife/'
+const DOMAIN = 'http://yolife.herokuapp.com/'
 
 export const CONSTANT_API = {
     usersList: DOMAIN+'users/usersList.html',

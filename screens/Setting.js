@@ -5,7 +5,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 
-import DeviceSetting from '../utils/DeviceSetting';
 import SettingHeader from './components/SettingHeader';
 import { logOut } from '../redux/actions/user';
 
@@ -42,7 +41,7 @@ class Setting extends React.Component{
                             color='#000'
                             style={styles.buttonIcon}
                         />
-                        <Text style={styles.buttonText}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.language}</Text>
+                        <Text style={styles.buttonText}>{this.props.language.language}</Text>
                         <Icon 
                             name={'ios-arrow-forward'}
                             size={25}
@@ -56,7 +55,7 @@ class Setting extends React.Component{
                             color='#000'
                             style={styles.buttonIcon}
                         />
-                        <Text style={styles.buttonText}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.location}</Text>
+                        <Text style={styles.buttonText}>{this.props.language.location}</Text>
                         <Icon 
                             name={'ios-arrow-forward'}
                             size={25}
@@ -70,7 +69,7 @@ class Setting extends React.Component{
                             color='#000'
                             style={styles.buttonIcon}
                         />
-                        <Text style={styles.buttonText}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.payment}</Text>
+                        <Text style={styles.buttonText}>{this.props.language.payment}</Text>
                         <Icon 
                             name={'ios-arrow-forward'}
                             size={25}
@@ -85,7 +84,7 @@ class Setting extends React.Component{
                             color='#000'
                             style={styles.buttonIcon}
                         />
-                        <Text style={styles.buttonText}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.aboutUs}</Text>
+                        <Text style={styles.buttonText}>{this.props.language.aboutUs}</Text>
                         <Icon 
                             name={'ios-arrow-forward'}
                             size={25}
@@ -100,7 +99,7 @@ class Setting extends React.Component{
                             color='#000'
                             style={styles.buttonIcon}
                         />
-                        <Text style={styles.buttonText}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.logout}</Text>
+                        <Text style={styles.buttonText}>{this.props.language.logout}</Text>
                         <Icon 
                             name={'ios-arrow-forward'}
                             size={25}
@@ -167,6 +166,7 @@ function mapState2Props(store){
         isLoggedIn: store.userStore.isLoggedIn,
         user: store.userStore.user,
         status: store.userStore.status,
+        language: store.setting.language,
     }
 }
 

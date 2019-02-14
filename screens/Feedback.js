@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import email from 'react-native-email'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import DeviceSetting from '../utils/DeviceSetting';
-
 const { width, height } = Dimensions.get('window');
 const TO_EMAIL = 'laplace.developer@gmail.com'
 
@@ -58,7 +56,7 @@ class Feedback extends React.Component {
                     <TextInput
                         style={textArea}
                         underlineColorAndroid="transparent"
-                        placeholder={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.feedbackMessage}
+                        placeholder={this.props.language.feedbackMessage}
                         placeholderTextColor="grey"
                         numberOfLines={15}
                         multiline={true}
@@ -70,7 +68,7 @@ class Feedback extends React.Component {
                     <View style={buttonContainer}>
                         <Button
                         onPress={this.handleEmail.bind(this)}
-                        title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.sendFeedback}
+                        title={this.props.language.sendFeedback}
                         color="#841584"
                         />                
                     </View>
@@ -108,6 +106,7 @@ function mapState2Props(store){
         isLoggedIn: store.userStore.isLoggedIn,
         user: store.userStore.user,
         status: store.userStore.status,
+        language: store.setting.language,
     }
 }
 

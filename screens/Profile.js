@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { Constants, ImagePicker, Permissions } from 'expo';
 import Modal from "react-native-modal";
 
-import DeviceSetting from '../utils/DeviceSetting';
 import DataUtil from  '../utils/DataUtil';
 import { saveUser } from '../redux/actions/user';
 import * as TYPES from '../redux/actions/types';
@@ -192,7 +191,7 @@ const LOADING_AVATAR = require('../assets/images/loadingAvatar.gif')
                     paddingBottom:10,
                     marginTop:2,
                 }}>
-                    <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.firstName+': '}</Text>
+                    <Text style={{color:'#aaa',marginBottom:5}}>{this.props.language.firstName+': '}</Text>
                     <TextInput style={{fontSize:20}}
                         value={this.state.firstName}
                         onChangeText={(text)=>{this.setState({firstName:text})}}
@@ -206,7 +205,7 @@ const LOADING_AVATAR = require('../assets/images/loadingAvatar.gif')
                     paddingBottom:10,
                     marginTop:2,
                 }}>
-                    <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.lastName+': '}</Text>
+                    <Text style={{color:'#aaa',marginBottom:5}}>{this.props.language.lastName+': '}</Text>
                     <TextInput style={{fontSize:20}}
                         value={this.state.lastName}
                         onChangeText={(text)=>{this.setState({lastName:text})}}
@@ -220,7 +219,7 @@ const LOADING_AVATAR = require('../assets/images/loadingAvatar.gif')
                     paddingBottom:10,
                     marginTop:2,
                 }}>
-                    <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.telephoneNumber+': '}</Text>
+                    <Text style={{color:'#aaa',marginBottom:5}}>{this.props.language.telephoneNumber+': '}</Text>
                     <TextInput style={{fontSize:20}}
                         value={this.state.phoneNumber}
                         onChangeText={(text)=>{this.setState({phoneNumber:text})}}
@@ -234,7 +233,7 @@ const LOADING_AVATAR = require('../assets/images/loadingAvatar.gif')
                     paddingBottom:10,
                     marginTop:2,
                 }}>
-                    <Text style={{color:'#aaa',marginBottom:5}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.email+': '}</Text>
+                    <Text style={{color:'#aaa',marginBottom:5}}>{this.props.language.email+': '}</Text>
                     <TextInput style={{fontSize:20}}
                         value={this.state.email}
                         onChangeText={(text)=>{this.setState({email:text})}}
@@ -254,7 +253,7 @@ const LOADING_AVATAR = require('../assets/images/loadingAvatar.gif')
                 <Modal isVisible={this.state.showImageGrabModal} style={{justifyContent:'center', alignItems:'center'}} onBackdropPress={()=>this.setState({showImageGrabModal:false})}>
                 <View style={{backgroundColor:'#fff',paddingTop:10, paddingBottom:10, width:width*0.8, borderRadius:10}}>
                   <View style={{padding:10, borderBottomColor:'#ddd', borderBottomWidth:1}}>
-                      <View><Text style={{fontSize:23, marginLeft:20}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.choosePhotoFrom+':'}</Text></View>
+                      <View><Text style={{fontSize:23, marginLeft:20}}>{this.props.language.choosePhotoFrom+':'}</Text></View>
                   </View>
                   <TouchableOpacity style={{
                       justifyContent:'center', 
@@ -291,7 +290,8 @@ function mapState2Props(store){
         isLoggedIn: store.userStore.isLoggedIn,
         user: store.userStore.user,
         status: store.userStore.status,
-        account:store.userStore.account
+        account:store.userStore.account,
+        language: store.setting.language,
     }
 }
 

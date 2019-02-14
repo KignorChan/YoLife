@@ -25,9 +25,6 @@ import { Isao,Fumi, Hoshi } from 'react-native-textinput-effects';
 import { connect } from 'react-redux';
 import { CONSTANT_API, ADDRESS_TYPE } from '../constants/Constants';
 
-
-import DeviceSetting from '../utils/DeviceSetting';
-
 const { width, height } = Dimensions.get('window');
 
 const BUSINESS_IMAGE_WIDTH = width;
@@ -128,6 +125,10 @@ class AddBusinesses extends Component{
       });
     }
 
+    addCategory(){
+        //alert('sds')
+    }
+
     _renderInformationSection(){
         const {
             carouselStyle,
@@ -157,7 +158,7 @@ class AddBusinesses extends Component{
                         marginTop:2,
                     }}>
                         <Hoshi
-                        label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.businessName}
+                        label={this.props.language.businessName}
                         borderColor={'#b76c94'}
                         onChangeText={(value)=>{
                           this.setState({ businessName: value })
@@ -174,7 +175,7 @@ class AddBusinesses extends Component{
                         marginTop:2,
                     }}>
                         <Hoshi
-                        label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.description}
+                        label={this.props.language.description}
                         borderColor={'#b76c94'}
                         onChangeText={(value)=>{
                         this.setState({ description: value })
@@ -191,7 +192,7 @@ class AddBusinesses extends Component{
                         marginTop:2,
                     }}>
                         <Hoshi
-                        label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.ownerName}
+                        label={this.props.language.ownerName}
                         borderColor={'#b76c94'}
                         onChangeText={(value)=>{
                         this.setState({ ownerName: value })
@@ -208,7 +209,7 @@ class AddBusinesses extends Component{
                         marginTop:2,
                     }}>
                         <Hoshi
-                        label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.tags}
+                        label={this.props.language.tags}
                         borderColor={'#b76c94'}
                         onChangeText={(value)=>{
                         this.setState({ tags: value })
@@ -243,10 +244,10 @@ class AddBusinesses extends Component{
                     borderColor: '#ddd'
                 }}>
                     <TouchableOpacity style={editButtonStyle} onPress={()=>{this._toggleModal()}}>
-                        <Text style={buttonTextStyle}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.addCategory}</Text>
+                        <Text style={buttonTextStyle}>{this.props.language.addCategory}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={editButtonStyle} onPress={()=>{this._toggleModal()}}>
-                        <Text style={buttonTextStyle}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.edit}</Text>
+                        <Text style={buttonTextStyle}>{this.props.language.edit}</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -267,7 +268,7 @@ class AddBusinesses extends Component{
                     marginTop:2,
                 }}>
                     <Hoshi
-                    label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.telephoneNumber}
+                    label={this.props.language.telephoneNumber}
                     borderColor={'#b76c94'}
                     onChangeText={(value)=>{
                     this.setState({ telephoneNumber: value })
@@ -285,7 +286,7 @@ class AddBusinesses extends Component{
                     marginTop:2,
                 }}>
                     <Hoshi
-                    label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.email}
+                    label={this.props.language.email}
                     borderColor={'#b76c94'}
                     onChangeText={(value)=>{
                     this.setState({ email: value })
@@ -302,7 +303,7 @@ class AddBusinesses extends Component{
                     marginTop:2,
                 }}>
                     <Hoshi
-                    label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.website}
+                    label={this.props.language.website}
                     borderColor={'#b76c94'}
                     onChangeText={(value)=>{
                     this.setState({ website: value })
@@ -322,7 +323,7 @@ class AddBusinesses extends Component{
                     Platform.OS==='android'?
                     <TouchableOpacity onPress={()=>{this._addressSetting()}}>
                     <Hoshi
-                    label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.address}
+                    label={this.props.language.address}
                     borderColor={'#b76c94'}
                     value={this.state.address}
                     editable={false}
@@ -330,7 +331,7 @@ class AddBusinesses extends Component{
                     />
                     </TouchableOpacity>:
                     <Hoshi
-                    label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.address}
+                    label={this.props.language.address}
                     borderColor={'#b76c94'}
                     onFocus={()=>{this._addressSetting(); this.addressInput.blur();}}
                     editable={true}
@@ -365,7 +366,7 @@ class AddBusinesses extends Component{
                     </TouchableOpacity>
                 </View>
                 <View style={{flex:3, alignItems:'center'}}>
-                    <Text style={{fontSize:18}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.address}</Text>
+                    <Text style={{fontSize:18}}>{this.props.language.address}</Text>
                 </View>
                 <View style={{flex:1, paddingRight:20, alignItems:'flex-end'}}>
                     <TouchableOpacity onPress={()=>{this._handleSubmit()}}>
@@ -374,13 +375,13 @@ class AddBusinesses extends Component{
                 </View>
                 </View>
                 <ScrollableTabView style={scrollableView}>
-                    <View tabLabel={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.information} style={body}>
+                    <View tabLabel={this.props.language.information} style={body}>
                         {this._renderInformationSection()}
                     </View>
-                    <View tabLabel={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.items} style={body}>
+                    <View tabLabel={this.props.language.items} style={body}>
                         {this._renderItemsSection()}
                     </View>
-                    <View tabLabel={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.contact} style={body}>
+                    <View tabLabel={this.props.language.contact} style={body}>
                         {this._renderContactSection()}
                     </View>
                 </ScrollableTabView>
@@ -388,7 +389,7 @@ class AddBusinesses extends Component{
                 <Modal style={{flex:1}} isVisible={this.state.showAddCategoryModal} onBackdropPress={()=>this._toggleModal()}>
                     <View style={modalContent}>
                         <Hoshi
-                        label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.categoryName}
+                        label={this.props.language.categoryName}
                         borderColor={'#b76c94'}
                         onChangeText={(value)=>{
                         this.setState({ category: value })
@@ -409,11 +410,11 @@ class AddBusinesses extends Component{
                             style={submitButtonStyle}
                             onPress={()=>{this._toggleModal()}}
                         >
-                            <Text style={submitButtonTextStyle}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.cancel}</Text>
+                            <Text style={submitButtonTextStyle}>{this.props.language.cancel}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
-                            style={buttonStyle} onPress={()=>{this.addCategory}}>
-                            <Text style={buttonTextStyle}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.confirm}</Text>
+                            style={buttonStyle} onPress={()=>{this.addCategory()}}>
+                            <Text style={buttonTextStyle}>{this.props.language.confirm}</Text>
                         </TouchableOpacity>
 
                         </View>
@@ -492,6 +493,7 @@ function mapStateToProps(store){
     return{
         account: store.userStore.account,
         location: store.userStore.location,
+        language: store.setting.language,
     }
 }
   

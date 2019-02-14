@@ -28,7 +28,6 @@ import {
 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import * as firebase from 'firebase';
-import DeviceSetting from '../utils/DeviceSetting';
 import DataUtil from  '../utils/DataUtil';
 import {Toast} from 'teaset';
 import { parsePhoneNumberFromString } from 'libphonenumber-js/max';
@@ -197,7 +196,7 @@ class Register extends React.Component {
         <Content style={{ backgroundColor: 'white' }}>
           <View style={{ marginLeft: 20, marginRight: 20, marginTop: 30 }}>
             <Fumi
-              label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.email}
+              label={this.props.language.email}
               iconClass={FontAwesomeIcon}
               iconName={'envelope'}
               iconColor={'#f95a25'}
@@ -208,7 +207,7 @@ class Register extends React.Component {
               keyboardType='email-address'
             />
             <Fumi
-              label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.password}
+              label={this.props.language.password}
               iconClass={FontAwesomeIcon}
               iconName={'key'}
               iconColor={'#f95a25'}
@@ -220,7 +219,7 @@ class Register extends React.Component {
               
             />
             <Fumi
-              label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.confirmPassword}
+              label={this.props.language.confirmPassword}
               iconClass={FontAwesomeIcon}
               iconName={'key'}
               iconColor={'#f95a25'}
@@ -237,7 +236,7 @@ class Register extends React.Component {
                 iconName={'phone'}
                 iconColor={'#f95a25'}
                 iconSize={20}
-                label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.phoneNumber}
+                label={this.props.language.phoneNumber}
                 onChangeText={value =>
                   this.debouncedSetState({ mobile: value })
                 }
@@ -270,7 +269,7 @@ class Register extends React.Component {
               onPress={() => this.register()}
               disabled={this.state.loading}
             >
-              <Text style={{ color: 'white' }}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.register}</Text>
+              <Text style={{ color: 'white' }}>{this.props.language.register}</Text>
             </Button>
           </View>
         </Content>
@@ -281,7 +280,7 @@ class Register extends React.Component {
 
 function mapStateToProps(store){
   return {
-
+    language: store.setting.language,
   }
 }
 

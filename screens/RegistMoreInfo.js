@@ -36,9 +36,6 @@ import * as firebase from 'firebase';
 import {Toast} from 'teaset';
 import { parsePhoneNumberFromString } from 'libphonenumber-js/max';
 import Modal from "react-native-modal";
-import { resolve } from 'uri-js';
-import { reject } from 'rsvp';
-import FileUploader from "react-firebase-file-uploader";
 import { connect } from 'react-redux';
 import { saveAccount, saveUser, firstLogin } from '../redux/actions/user';
 import axios from 'axios';
@@ -46,8 +43,6 @@ import Qs from 'qs';
 
 import { CONSTANT_API, ADDRESS_TYPE } from '../constants/Constants';
 
-
-import DeviceSetting from '../utils/DeviceSetting';
 import DataUtil from  '../utils/DataUtil';
 
 import '../utils/AdroidTimeout';
@@ -100,10 +95,10 @@ class RegistMoreInfo extends React.Component {
     }
   }
 
-  async componentDidMount(){
-    await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    await Permissions.askAsync(Permissions.CAMERA);
-  }
+  // async componentDidMount(){
+  //   await Permissions.askAsync(Permissions.CAMERA_ROLL);
+  //   await Permissions.askAsync(Permissions.CAMERA);
+  // }
 
   async _renderImagePicker(){
     if(Platform.OS==='ios'){
@@ -285,21 +280,21 @@ class RegistMoreInfo extends React.Component {
                 </TouchableOpacity>
             </View>
             <Hoshi
-            label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.firstName}
+            label={this.props.language.firstName}
             borderColor={'#b76c94'}
             onChangeText={(value)=>{
               this.setState({ firstName: value })
             }}
             />
             <Hoshi
-            label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.lastName}
+            label={this.props.language.lastName}
             borderColor={'#b76c94'}
             onChangeText={(value)=>{
               this.setState({ lastName: value })
             }}
             />
             <Hoshi
-            label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.phoneNumber}
+            label={this.props.language.phoneNumber}
             borderColor={'#b76c94'}
             onChangeText={(value)=>{
               this.setState({ mobile: value })
@@ -310,7 +305,7 @@ class RegistMoreInfo extends React.Component {
               Platform.OS==='android'?
               <TouchableOpacity onPress={()=>{this._addressSetting()}}>
               <Hoshi
-              label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.address}
+              label={this.props.language.address}
               borderColor={'#b76c94'}
               value={this.state.address}
               editable={false}
@@ -318,7 +313,7 @@ class RegistMoreInfo extends React.Component {
               />
               </TouchableOpacity>:
               <Hoshi
-              label={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.address}
+              label={this.props.language.address}
               borderColor={'#b76c94'}
               onFocus={()=>{this._addressSetting(); this.addressInput.blur();}}
               editable={true}
@@ -340,7 +335,7 @@ class RegistMoreInfo extends React.Component {
             </View>
             <CheckBox
               center
-              title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.includeBusinessFeature}
+              title={this.props.language.includeBusinessFeature}
               checked={this.state.businessType}
               onPress={()=>{this.setState({businessType:!this.state.businessType})}}
             />
@@ -362,19 +357,19 @@ class RegistMoreInfo extends React.Component {
               onPress={() => this.register()}
               disabled={this.state.loading}
             >
-              <Text style={{ color: 'white' }}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.skip}</Text>
+              <Text style={{ color: 'white' }}>{this.props.language.skip}</Text>
             </Button>
             <Button
                 onPress={() => this._nextOnPress()}
                 disabled={this.state.loading}
             >
-                <Text style={{ color: 'white' }}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.next}</Text>
+                <Text style={{ color: 'white' }}>{this.props.language.next}</Text>
             </Button>
           </View>
           <Modal isVisible={this.state.showImageGrabModal} style={{justifyContent:'center', alignItems:'center'}} onBackdropPress={()=>this.setState({showImageGrabModal:false})}>
           <View style={{backgroundColor:'#fff',paddingTop:10, paddingBottom:10, width:width*0.8, borderRadius:10}}>
             <View style={{padding:10, borderBottomColor:'#ddd', borderBottomWidth:1}}>
-                <View><Text style={{fontSize:23, marginLeft:20}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.choosePhotoFrom+':'}</Text></View>
+                <View><Text style={{fontSize:23, marginLeft:20}}>{this.props.language.choosePhotoFrom+':'}</Text></View>
             </View>
             <TouchableOpacity style={{
                 justifyContent:'center', 
@@ -409,6 +404,7 @@ function mapStateToProps(store){
   return{
     account: store.userStore.account,
     location: store.userStore.location,
+    language: store.setting.language,
   }
 }
 

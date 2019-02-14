@@ -17,8 +17,9 @@ import {
 //import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import {Toast} from 'teaset';
-import DeviceSetting from '../utils/DeviceSetting';
 import FireBase from '../backend/Firebase';
+import { connect } from 'react-redux';
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -81,7 +82,7 @@ class EmailVerification extends React.Component{
                 var time = this.state.expireSeconds-1;
                 this.setState({expireSeconds:time});
                 if(time<=0){
-                    this.setState({expireMessage:DeviceSetting.setting.APP_LANGUAGE_PACKAGE.emailVerifyExpireMessage})
+                    this.setState({expireMessage:this.props.language.emailVerifyExpireMessage})
                 }
             }    
         },1000)
@@ -173,7 +174,7 @@ class EmailVerification extends React.Component{
                 })
                 if(!user.emailVerified){
                     this._sendEmailVerification();
-                    Toast.sad(DeviceSetting.setting.APP_LANGUAGE_PACKAGE.emailVerifyFailMessage);
+                    Toast.sad(this.props.language.emailVerifyFailMessage);
                 }
             }
             this.setState({loading:false});
@@ -189,7 +190,7 @@ class EmailVerification extends React.Component{
         //             })
         //             if(!user.emailVerified){
         //                 this._sendEmailVerification();
-        //                 Toast.sad(DeviceSetting.setting.APP_LANGUAGE_PACKAGE.emailVerifyFailMessage);
+        //                 Toast.sad(this.props.language.emailVerifyFailMessage);
         //             }
         //         }
         //         this.setState({loading:false});
@@ -217,7 +218,7 @@ class EmailVerification extends React.Component{
                     <Image source={require('../assets/images/emailVerify.gif')} style={{width:IMAGE_WIDTH, height:IMAGE_WIDTH}}/>
                     </View>
                     <View style={{padding:20}}>
-                        <Text style={{fontSize:24, color:'#fff'}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.emailVerificationMessage}</Text>
+                        <Text style={{fontSize:24, color:'#fff'}}>{this.props.language.emailVerificationMessage}</Text>
                     </View>
                     <View style={{alignItems:'center'}}>
                         <TouchableOpacity style={{
@@ -229,7 +230,7 @@ class EmailVerification extends React.Component{
                             backgroundColor:'#3F7B61'}}
                             onPress={this._sendEmailVerification.bind(this)}
                             >
-                            <Text style={{color:'#3CB97F', fontSize:20, fontWeight:'bold'}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.sendEmailVerification}</Text>
+                            <Text style={{color:'#3CB97F', fontSize:20, fontWeight:'bold'}}>{this.props.language.sendEmailVerification}</Text>
                         </TouchableOpacity>
                         {
                             this.state.expireSeconds<=0?
@@ -248,7 +249,7 @@ class EmailVerification extends React.Component{
                         }}
                             onPress={this._refreshComponent.bind(this)}
                             >
-                            <Text style={{color:'#3F7B61', fontSize:20, fontWeight:'bold'}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.verified+'? '+DeviceSetting.setting.APP_LANGUAGE_PACKAGE.clickHereToNext}</Text>
+                            <Text style={{color:'#3F7B61', fontSize:20, fontWeight:'bold'}}>{this.props.language.verified+'? '+this.props.language.clickHereToNext}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{
                             marginTop:20,
@@ -261,7 +262,7 @@ class EmailVerification extends React.Component{
                         }}
                             onPress={this._logoutAndGoToMain.bind(this)}
                             >
-                            <Text style={{color:'#FFFFFF', fontSize:20, fontWeight:'bold'}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.backToHome}</Text>
+                            <Text style={{color:'#FFFFFF', fontSize:20, fontWeight:'bold'}}>{this.props.language.backToHome}</Text>
                         </TouchableOpacity>
                     </View>
                 </SafeAreaView>
@@ -278,7 +279,7 @@ class EmailVerification extends React.Component{
                 <Image source={require('../assets/images/sucess.gif')} style={{width:IMAGE_WIDTH, height:IMAGE_WIDTH}}/>
                 </View>
                 <View style={{padding:30}}>
-                    <Text style={{fontSize:24, color:'#3F7B61'}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.emailVerifySucessMessage}</Text>
+                    <Text style={{fontSize:24, color:'#3F7B61'}}>{this.props.language.emailVerifySucessMessage}</Text>
                 </View>
                 <View style={{alignItems:'center'}}>
                     <TouchableOpacity style={{
@@ -292,7 +293,7 @@ class EmailVerification extends React.Component{
                     }}
                         onPress={this._registMoreInfo.bind(this)}
                         >
-                        <Text style={{color:'#3F7B61', fontSize:20, fontWeight:'bold'}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.next}</Text>
+                        <Text style={{color:'#3F7B61', fontSize:20, fontWeight:'bold'}}>{this.props.language.next}</Text>
                     </TouchableOpacity>
                 </View>
             </SafeAreaView>
@@ -301,4 +302,25 @@ class EmailVerification extends React.Component{
     }
 }
 
-export default EmailVerification;
+function mapStateToProps(store){
+    return {
+      language: store.setting.language,
+      isLoggedIn: store.userStore.isLoggedIn
+    }
+  }
+  
+  function mapDispatchToProps(dispatch){
+    return{
+      saveLocation(location){
+        dispatch(saveLocation(location));
+      },
+      languageSetting(language){
+        dispatch(languageSetting(language))
+      },
+      logout(){
+        dispatch(logOut());
+      }
+    }
+  }
+  
+export default connect(mapStateToProps, mapDispatchToProps)(EmailVerification);

@@ -63,7 +63,7 @@ export default class Firebase{
         return new Promise((resolve, reject)=>{
             firebase.auth().createUserWithEmailAndPassword(email, password).then(account=>{
                 resolve(account);
-            }).then(e=>{
+            }).catch(e=>{
                 reject(e);
             })
         })

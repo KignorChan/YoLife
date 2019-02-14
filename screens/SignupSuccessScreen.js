@@ -4,13 +4,12 @@ import Modal from "react-native-modal";
 import { Button, Text } from 'native-base';
 import { Font, AppLoading } from "expo";
 import { Actions } from 'react-native-router-flux';
-
-import DeviceSetting from '../utils/DeviceSetting';
+import { connect } from 'react-redux';
 
 
 const { width, height } = Dimensions.get('screen');
 
-export default class SignupSuccessScreen extends React.Component {
+class SignupSuccessScreen extends React.Component {
 
     constructor(props){
         super(props);
@@ -62,10 +61,35 @@ export default class SignupSuccessScreen extends React.Component {
                     borderRadius:5, 
                     marginTop:40}}
                     onPress={()=>{Actions.reset('tabs')}}>
-                    <Text style={{color:'#fff'}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.next}</Text>
+                    <Text style={{color:'#fff'}}>{this.props.language.next}</Text>
                 </TouchableOpacity>
             </Animated.View>
             </ImageBackground>
         )
     }
 }
+
+
+function mapStateToProps(store){
+    return {
+      language: store.setting.language,
+      isLoggedIn: store.userStore.isLoggedIn
+    }
+  }
+  
+  function mapDispatchToProps(dispatch){
+    return{
+      saveLocation(location){
+        dispatch(saveLocation(location));
+      },
+      languageSetting(language){
+        dispatch(languageSetting(language))
+      },
+      logout(){
+        dispatch(logOut());
+      }
+    }
+  }
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(SignupSuccessScreen);
+  

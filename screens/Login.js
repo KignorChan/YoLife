@@ -31,9 +31,6 @@ import * as TYPES from '../redux/actions/types';
 import { CONSTANT_API } from '../constants/Constants';
 
 
-import DeviceSetting from '../utils/DeviceSetting';
-
-
 
 class LoginPage extends Component{
     constructor(props){
@@ -69,11 +66,11 @@ class LoginPage extends Component{
     handleLogin(){
         const { email, password } = this.state;
         if (!email) {
-            Toast.sad(DeviceSetting.setting.APP_LANGUAGE_PACKAGE.pleaseEnterYourEmail);
+            Toast.sad(this.props.language.pleaseEnterYourEmail);
             return;
         }
         if(!password){
-            Toast.sad(DeviceSetting.setting.APP_LANGUAGE_PACKAGE.pleaseEnterYourPassword);
+            Toast.sad(this.props.language.pleaseEnterYourPassword);
             return;
         }
         this.setState({loading:true});
@@ -159,7 +156,7 @@ class LoginPage extends Component{
                     style={{ resizeMode: 'stretch', flex: 1, justifyContent:'center', alignItems:'center' }}
                 >
                 <View style={loginStyle.loginMain}>
-                    <Text style={{fontSize:28, fontFamily:'Arial', color:'#ffffff'}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.welcome+'!'}</Text>
+                    <Text style={{fontSize:28, fontFamily:'Arial', color:'#ffffff'}}>{this.props.language.welcome+'!'}</Text>
                     <View style={loginStyle.formStyle}>
                         <View style={[loginStyle.formInput,loginStyle.formInputSplit]}>
                             <Image
@@ -168,7 +165,7 @@ class LoginPage extends Component{
                             />
                             <TextInput 
                                 ref="login_name" 
-                                placeholder={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.email}
+                                placeholder={this.props.language.email}
                                 style={loginStyle.loginInput} 
                                 onChangeText={this.onChangeName}
                                 value={email}
@@ -181,7 +178,7 @@ class LoginPage extends Component{
                                 ref="login_psw"  
                                 style={loginStyle.loginInput} 
                                 secureTextEntry={true}
-                                placeholder={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.password}
+                                placeholder={this.props.language.password}
                                 value={password}
                                 onChangeText={this.onChangePswd} />
                         </View>
@@ -190,15 +187,15 @@ class LoginPage extends Component{
                     <View style={{alignItems:'center'}}>
                         <TouchableOpacity onPress={()=>{alert('sfjas')}} style={[loginStyle.forget,{flexDirection:'row'}]}>
                             <FeatherIcon name='alert-circle' size={16} style={{color:'#fff', marginRight:5}}/>
-                            <Text style={{color:'#fff'}}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.forgetPassword+'?'}</Text>
+                            <Text style={{color:'#fff'}}>{this.props.language.forgetPassword+'?'}</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={loginStyle.btn}>
                         <TouchableOpacity style={loginStyle.btnWrap} onPress={this.handleLogin}>
-                            <Text style={loginStyle.loginBtn1} >{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.login}</Text>
+                            <Text style={loginStyle.loginBtn1} >{this.props.language.login}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={loginStyle.btnWrap} onPress={this.handleRegister}>
-                            <Text style={loginStyle.loginBtn2}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.register}</Text>
+                            <Text style={loginStyle.loginBtn2}>{this.props.language.register}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -220,6 +217,7 @@ function mapState2Props(store){
         isLoggedIn: store.userStore.isLoggedIn,
         user: store.userStore.user,
         status: store.userStore.status,
+        language: store.setting.language,
     }
 }
 

@@ -18,7 +18,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import DeviceSetting from '../utils/DeviceSetting';
 import { logOut } from '../redux/actions/user';
 import Toast from 'teaset/components/Toast/Toast';
 
@@ -72,11 +71,11 @@ class MyCenter extends React.Component {
     }
 
     _goToSetting(){
-        if(this.props.isLoggedIn){
-            Actions.push('setting')
-        }else{
-            this._goLoginPageWithErrorMassage()
-        }
+        // if(this.props.isLoggedIn){
+             Actions.push('setting')
+        // }else{
+        //     this._goLoginPageWithErrorMassage()
+        // }
         
     }
     
@@ -105,7 +104,7 @@ class MyCenter extends React.Component {
                     </TouchableOpacity>:
                     <TouchableOpacity onPress={()=>this._goLoginPage()} style={styles.left}>
                         <Image source={require('../assets/images/qq.jpg')} style={avatar}/>
-                        <Text style={headerUsername}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.loginText}</Text>
+                        <Text style={headerUsername}>{this.props.language.loginText}</Text>
                     </TouchableOpacity> 
                 }
 
@@ -122,7 +121,7 @@ class MyCenter extends React.Component {
                             style={styles.buttonIcon}
                         />
          
-                        <Text style={styles.buttonText}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.myProfile}</Text>
+                        <Text style={styles.buttonText}>{this.props.language.myProfile}</Text>
                         <Icon 
                             name={'ios-arrow-forward'}
                             size={25}
@@ -139,7 +138,7 @@ class MyCenter extends React.Component {
                             style={styles.buttonIcon}
                         />
         
-                        <Text style={styles.buttonText}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.favoriteStore}</Text>
+                        <Text style={styles.buttonText}>{this.props.language.favoriteStore}</Text>
                         <Icon 
                             name={'ios-arrow-forward'}
                             size={25}
@@ -156,7 +155,7 @@ class MyCenter extends React.Component {
                             style={styles.buttonIcon}
                         />
         
-                        <Text style={styles.buttonText}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.manageStore}</Text>
+                        <Text style={styles.buttonText}>{this.props.language.manageStore}</Text>
                         <Icon 
                             name={'ios-arrow-forward'}
                             size={25}
@@ -173,7 +172,7 @@ class MyCenter extends React.Component {
                             style={styles.buttonIcon}
                         />
         
-                        <Text style={styles.buttonText}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.addBusiness}</Text>
+                        <Text style={styles.buttonText}>{this.props.language.addBusiness}</Text>
                         <Icon 
                             name={'ios-arrow-forward'}
                             size={25}
@@ -190,7 +189,7 @@ class MyCenter extends React.Component {
                             style={styles.buttonIcon}
                         />
         
-                        <Text style={styles.buttonText}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.contactUs}</Text>
+                        <Text style={styles.buttonText}>{this.props.language.contactUs}</Text>
                         <Icon 
                             name={'ios-arrow-forward'}
                             size={25}
@@ -207,7 +206,7 @@ class MyCenter extends React.Component {
                             style={styles.buttonIcon}
                         />
         
-                        <Text style={styles.buttonText}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.setting}</Text>
+                        <Text style={styles.buttonText}>{this.props.language.setting}</Text>
                         <Icon 
                             name={'ios-arrow-forward'}
                             size={25}
@@ -216,7 +215,7 @@ class MyCenter extends React.Component {
                 
                     </TouchableOpacity>
 
-                    {/*<TouchableOpacity onPress={() => this.props.gotoLogout()} style={styles.buttonContainer}>
+                    <TouchableOpacity onPress={() => this.props.gotoLogout()} style={styles.buttonContainer}>
                         <SimpleLineIcons 
                             name={'logout'}
                             size={25}
@@ -224,14 +223,14 @@ class MyCenter extends React.Component {
                             style={styles.buttonIcon}
                         />
         
-                        <Text style={styles.buttonText}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.logout}</Text>
+                        <Text style={styles.buttonText}>{this.props.language.logout}</Text>
                         <Icon 
                             name={'ios-arrow-forward'}
                             size={25}
                             style={styles.buttonArrowIcon}
                         />
                 
-                        </TouchableOpacity>*/}
+                    </TouchableOpacity>
 
                 </ScrollView>
             </SafeAreaView>
@@ -304,6 +303,7 @@ function mapState2Props(store){
         isLoggedIn: store.userStore.isLoggedIn,
         user: store.userStore.user,
         status: store.userStore.status,
+        language: store.setting.language,
     }
 }
 

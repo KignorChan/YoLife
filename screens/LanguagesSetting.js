@@ -2,8 +2,10 @@ import React from 'react';
 import { View, Text, ScrollView, SafeAreaView, Platform, StatusBar, Dimensions, TouchableOpacity } from 'react-native';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { connect } from 'react-redux';
 
-import DeviceSetting from '../utils/DeviceSetting';
+import { languageSetting } from '../redux/actions/setting';
+import { LANGUAGES } from '../constants/Languages';
 
 const { width, height } = Dimensions.get('window');
 const HEADER_HEIGHT = height*0.18;
@@ -23,11 +25,11 @@ class LanguagesSetting extends React.Component{
         return(
             <SafeAreaView style={container}>
                 <ScrollView style={buttonSection}>
-                    <TouchableOpacity style={styles.buttonContainer} onPress={()=>{DeviceSetting.setAppLanguage("CHINESE")}}>        
-                        <Text style={styles.buttonText}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.simplifiedChinese}</Text>
+                    <TouchableOpacity style={styles.buttonContainer} onPress={()=>{this.props.languageSetting(LANGUAGES.CHINESE)}}>        
+                        <Text style={styles.buttonText}>{this.props.language.simplifiedChinese}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonContainer} onPress={()=>{DeviceSetting.setAppLanguage("ENGLISH")}}>        
-                        <Text style={styles.buttonText}>{DeviceSetting.setting.APP_LANGUAGE_PACKAGE.english}</Text>
+                    <TouchableOpacity style={styles.buttonContainer} onPress={()=>{this.props.languageSetting(LANGUAGES.ENGLISH)}}>        
+                        <Text style={styles.buttonText}>{this.props.language.english}</Text>
                     </TouchableOpacity>
                 </ScrollView>
             </SafeAreaView> 
@@ -86,4 +88,18 @@ const styles = {
     }
 }
 
-export default LanguagesSetting;
+function mapStateToProps(store){
+    return {
+      language: store.setting.language,
+    }
+  }
+
+function mapDispatchToProps(dispatch){
+    return{
+      languageSetting(language){
+        dispatch(languageSetting(language))
+      }
+    }
+  }
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(LanguagesSetting);

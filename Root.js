@@ -5,11 +5,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { Constants, Location, Permissions } from 'expo';
-
 import { connect } from 'react-redux';
-import { saveLocation } from './redux/actions/user';
 
-import DeviceSetting from './utils/DeviceSetting';
+import { saveLocation } from './redux/actions/user';
+import { languageSetting } from './redux/actions/setting';
+
+import { LANGUAGES } from './constants/Languages';
 
 import Home from './screens/Home';
 import OrderHistory from './screens/order/OrderHistory';
@@ -41,6 +42,16 @@ class Root extends React.Component {
     return (
       <Ionicons name='ios-home'/>
     )
+  }
+
+  componentWillMount(){
+    if(this.props.language.languageSelected==='CHINESE'){
+      this.props.languageSetting(LANGUAGES.CHINESE)
+    }
+    if(this.props.language.languageSelected==='ENGLISH'){
+      this.props.languageSetting(LANGUAGES.ENGLISH)
+    }
+
   }
 
   componentDidMount(){
@@ -80,7 +91,7 @@ class Root extends React.Component {
             <Scene 
               key="home" 
               component={Home} 
-              title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.home}
+              title={this.props.language.home}
               icon={({focused})=>{
                 if(focused){
                   return(<MaterialCommunityIcons name='home' size={30} />)
@@ -94,7 +105,7 @@ class Root extends React.Component {
             <Scene 
               key="orderHistory" 
               component={OrderHistory} 
-              title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.myOrder}
+              title={this.props.language.myOrder}
               icon={({focused})=>{
                 if(focused){
                   return(<Ionicons name='ios-list-box' size={30} />)
@@ -107,7 +118,7 @@ class Root extends React.Component {
             <Scene 
               key="myCenter" 
               component={MyCenter} 
-              title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.me}
+              title={this.props.language.me}
               icon={({focused})=>{
                 if(focused){
                   return(<MaterialIcons name='person' size={30} />)
@@ -123,80 +134,80 @@ class Root extends React.Component {
         <Scene 
           key="setting"
           component={Setting}
-          title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.setting}
+          title={this.props.language.setting}
           hideNavBar={true}/>
           
         <Scene 
           key="languagessetting"
           component={LanguagesSetting}
-          title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.language}
+          title={this.props.language.language}
           hideNavBar={false}/> 
 
         <Scene 
           key="contactus"
           component={ContactUs}
-          title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.contactUs}
+          title={this.props.language.contactUs}
           hideNavBar={false}/> 
         
         <Scene 
             key="login"
             component={Login}
-            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.login}
+            title={this.props.language.login}
             hideNavBar={true}/>
         
         <Scene 
             key="register"
             component={Register}
-            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.register}
+            title={this.props.language.register}
             hideNavBar={false}/>
 
         <Scene 
             key="profile"
             component={Profile}
-            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.profile}
+            title={this.props.language.profile}
             hideNavBar={true}/>
 
         <Scene 
             key="locationsetting"
             component={LocationSetting}
-            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.locationSetting}
+            title={this.props.language.locationSetting}
             hideNavBar={false}/>
 
         <Scene 
             key="addbusinesses"
             component={AddBusinesses}
-            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.newBusiness}
+            title={this.props.language.newBusiness}
             hideNavBar={true}/>
 
         <Scene 
             key="feedback"
             component={Feedback}
-            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.feedback}
+            title={this.props.language.feedback}
             hideNavBar={false}/>
 
         <Scene 
             key="registmoreinfo"
             component={RegistMoreInfo}
-            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.moreInfo}
+            title={this.props.language.moreInfo}
             hideNavBar={false}
             />
 
         <Scene 
             key="addressinputview"
             component={AddressInputView}
-            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.address}
+            title={this.props.language.address}
             hideNavBar={true} />
 
         <Scene 
             key="signupsuccessscreen"
             component={SignupSuccessScreen}
-            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.welcome}
+            title={this.props.language.welcome}
             hideNavBar={true} />
 
         <Scene 
             key="emailverification"
             component={EmailVerification}
-            title={DeviceSetting.setting.APP_LANGUAGE_PACKAGE.emailVerification}
+            title={this.props.language.emailVerification}
             hideNavBar={true} />
 
       
@@ -228,6 +239,8 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(store){
   return {
+    language: store.setting.language,
+    isLoggedIn: store.userStore.isLoggedIn
   }
 }
 
@@ -235,6 +248,12 @@ function mapDispatchToProps(dispatch){
   return{
     saveLocation(location){
       dispatch(saveLocation(location));
+    },
+    languageSetting(language){
+      dispatch(languageSetting(language))
+    },
+    logout(){
+      dispatch(logOut());
     }
   }
 }
